@@ -1,0 +1,52 @@
+---
+interface Props {
+	title: string;
+	body: string;
+	href: string;
+	featured?: boolean;
+}
+
+import Text from './Text.astro';
+import { Badge } from './ui/react/badge';
+import { Button } from './ui/react/button';
+
+const { href, title, body, featured=false } = Astro.props;
+---
+
+<div class="bg-slate-100 w-full min-h-72 dark:bg-natural rounded-xl shadow-sm relative">
+	{featured && <Badge className='absolute z-10 left-2 top-2'>
+            <Text type="p" content="Featured" className=" text-white" />
+    </Badge>
+	}
+	
+	<div class={`flex w-full h-32 ${featured && `!h-48`} items-center self-center mx-auto rounded-2xl relative`}>
+		<img src="/img.jpg" alt="bids" class={`w-full h-32 ${featured && `!h-48 !rounded-2xl`} rounded-t-2xl`} />
+	</div>
+	<div class={`p-4 ${featured && '!px-0'}`}>
+		<Text type="p" className="text-primary text-sm" content="Provision of Maintenance Support Services Across NLNG Locations" />
+		{featured && <div>
+		<Text type="p" className="text-[12px]" content="Bidhive now talks to over 60 different platforms so you can share data no matter where you need it."/>
+		</div>}
+		<div>
+			<span class="flex justify-between font-semibold">
+				<Text className="text-[12px]" content="BID: 019129" />
+				<Text className="text-[12px]" content="Location: Abuja" />
+			</span>
+			<span class="flex justify-between">
+				<Text className="text-[12px]" content="Type: Expression of Interest" />
+			</span>
+			<span class="flex justify-between">
+<Text className="text-[12px]" content="Deadline: 23rd December, 2024" />
+			</span>
+		</div>
+
+		<div class="flex justify-between py-4">
+			<Button className='bg-primary'>
+				Place bid
+			</Button>
+			<Button variant='ghost' className="dark:text-foreground">
+				History
+			</Button>
+		</div>
+	</div>
+</div>

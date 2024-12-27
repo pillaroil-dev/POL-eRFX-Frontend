@@ -1,0 +1,176 @@
+---
+import { formatDate } from "@/utilities/helpers/time-formatter";
+import { Icon } from "astro-icon/components";
+
+const { data } = Astro.props;
+
+const tenderExpiringSoon = await data?.tenderExpiringSoon();
+
+const headerItem = [
+  "Tender Name",
+  "Tender location",
+  "Due date/time",
+  "Status",
+  "Invites",
+];
+---
+
+<div class="flex flex-col gap-x-4 ml-20 md:w-[calc(100%-5rem)] px-4 mt-24 mb-8">
+  <div>
+    <h1 class="font-semibold text-2xl text-foreground my-8">Dashboard</h1>
+  </div>
+
+  <div class="grid grid-cols-2 grid-rows-2 md:flex gap-4 md:gap-x-6">
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-foreground text-lg mb-2">Active Tenders</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {data?.activeTenderCount}
+        </p>
+        <Icon
+          name="majesticons:analytics"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Total Tenders</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {data?.totalTender}
+        </p>
+        <Icon
+          name="majesticons:analytics-line"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Accepted/Rejected</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {data?.acceptedBidsCount + "/" + data?.acceptedBidsCount}
+        </p>
+        <Icon
+          name="majesticons:analytics-plus-line"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Active Tenders (No Bids)</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {data?.activeNoBid}
+        </p>
+        <Icon
+          name="majesticons:analytics-restricted-line"
+          size={43}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 grid-rows-2 md:flex gap-4 md:gap-x-6 mt-12">
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Vendors</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {data?.totalVendor}
+        </p>
+        <Icon
+          name="majesticons:folder"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-gray-500 dark:text-gray-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Verified vendors</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {data?.verifiedVendorsCount}
+        </p>
+        <Icon
+          name="majesticons:scan-user"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">{``}</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">{``}</p>
+        <!-- <Icon
+          name="majesticons:dollar-circle-line"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        /> -->
+      </span>
+    </div>
+    <div
+      class="w-full md:w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">{``}</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">{``}</p>
+        <!-- <Icon
+          name="majesticons:door-exit-line"
+          size={43}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        /> -->
+      </span>
+    </div>
+  </div>
+
+  <div class="flex flex-col mt-12">
+    <h3 class="text-xl font-medium my-4 text-foreground">
+      Tenders expiring soon
+    </h3>
+    <table
+      class="w-full border-collapse border border-gray-200 dark:border-gray-700 text-foreground table-auto"
+    >
+      <thead>
+        <tr class="bg-slate-100 dark:bg-primary text-foreground text-left">
+          {headerItem.map((header) => (
+              <th class="py-4 px-4 font-semibold">{header}</th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        {tenderExpiringSoon.slice(0, 5)?.map((item) => (
+            <tr class="border-t border-gray-200 dark:border-gray-700">
+              <td class="py-4 px-4">{item?.title}</td>
+              <td class="py-4 px-4">{item?.location}</td>
+              <td class="py-4 px-4 text-red-600 font-semibold">
+                {formatDate(item?.endDate)}
+              </td>
+              <td class="py-4 px-4 font-semibold">{item?.status}</td>
+              <td class="py-4 px-4">{item?.bids?.length}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

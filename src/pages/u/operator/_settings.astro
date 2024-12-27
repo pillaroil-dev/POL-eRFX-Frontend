@@ -1,0 +1,28 @@
+<!-- ---
+import OperatorLayout from "../../../layouts/OperatorLayout.astro";
+import SettingsComponent from "@/components/ui/react/settings-component";
+
+const res = await fetch(`${import.meta.env.API_ENDPOINT}/v1/settings`);
+
+const { data } = await res?.json();
+
+const adminUsers = data?.user?.filter(
+  ({ role }: { role: string }) => role === "admin"
+);
+const users = data?.user?.filter(
+  ({ role }: { role: string }) => role === "user"
+);
+const operatorUsers = data?.user?.filter(
+  ({ role }: { role: string }) => role === "operator"
+);
+
+const userData = { adminUsers, operatorUsers, users };
+---
+
+<OperatorLayout title="Settings">
+  <SettingsComponent
+    usersData={userData}
+    settings={data.settings}
+    client:only
+  />
+</OperatorLayout> -->

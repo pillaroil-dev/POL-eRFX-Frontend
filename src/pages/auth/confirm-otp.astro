@@ -1,0 +1,17 @@
+---
+import AuthLayout from "../../layouts/AuthLayout.astro";
+import OtpComponent from "../../components/ui/react/otpComponent";
+
+const otpValue = Astro.cookies.get("otp")?.value;
+const otpType = Astro.cookies.get("otp-type")?.value;
+
+---
+
+<AuthLayout title="OTP Confirmation">
+  <OtpComponent
+    client:load
+    slot="auth-slot"
+    otpValue={Number(otpValue)}
+    otpType={otpType}
+  />
+</AuthLayout>

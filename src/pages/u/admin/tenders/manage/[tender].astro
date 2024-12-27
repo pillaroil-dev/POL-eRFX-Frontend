@@ -1,0 +1,43 @@
+---
+import AdminLayout from "../../../../../layouts/AdminLayout.astro";
+import { prisma } from "../../../../../utilities/helpers/prismaInstace";
+import { ManageTenderComponent } from "@/components/ui/react/manage-tender-component";
+import { HEADER_TOKEN, Headers } from "@/constants";
+
+const { tender } = Astro.params;
+const res = await fetch(
+  `${process.env.API_ENDPOINT}/v1/tenders/manage-tender/?${new URLSearchParams({ tender }).toString()}`,
+  { headers: Headers }
+);
+
+const data = await res.json();
+
+const listRecipients = async () => {
+  const recipients = await Promise.all(
+    data?.tender?.recipients.map(async (item) => {
+      const response = await prisma.contractor.findFirst({
+        where: { id: item?.contractorId },
+      });
+      return response;
+    })
+  );
+  return recipients;
+};
+
+const receivers = await listRecipients();
+const result = Object.assign({ ...data, recipientsWithDetails: receivers });
+
+const role = Astro.locals?.user?.user?.role;
+
+const bucketPublicDomain = import.meta.env.BUCKET_PUBLIC_DOMAIN;
+---
+
+<AdminLayout title={`Tender | ${result?.tender?.title}`}>
+  <ManageTenderComponent
+    token={HEADER_TOKEN}
+    client:load
+    result={result}
+    role={role}
+    bucketPublicDomain={bucketPublicDomain}
+  />
+</AdminLayout>

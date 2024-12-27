@@ -1,0 +1,17 @@
+---
+const {type, content, className} = Astro.props;
+---
+
+{ type === "p" ? <p class={`leading-7 text-foreground font-Inter ${className}`}>
+    {content}
+</p> : type === "h1" ? <h1 class={`scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl font-Inter ${className} text-foreground`}>
+    {content}
+</h1> : type === "h2" ? <h2 class={`scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0 font-Inter ${className} text-foreground`}>
+    {content}
+</h2> : type === "h3" ? <h3 class={`scroll-m-20 text-2xl font-semibold tracking-tight font-Inter ${className} text-foreground`}>
+    {content}
+</h3> : type === "h4" ? <h4 class={`scroll-m-20 text-2xl font-semibold tracking-tight font-Inter ${className} text-foreground`}>
+    {content}
+</h4> : type === "small" ? <small class={`text-sm font-medium leading-none font-Inter ${className} text-foreground`}>{content}</small> : <p class={`leading-7 font-Inter ${className} text-foreground`}>
+    {content}
+</p>}

@@ -1,0 +1,14 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import SignupForm from '@/components/ui/react/signup-form';
+---
+
+<AuthLayout title="Welcome to POL eRFX">
+  <div class="flex justify-end flex-end" slot="auth-slot">
+    <a href="/auth/login">
+      <p class="">Login</p>
+    </a>
+  </div>
+  <SignupForm client:load slot="auth-slot" />
+</AuthLayout>
+ 

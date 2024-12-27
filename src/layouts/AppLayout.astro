@@ -1,0 +1,24 @@
+---
+import "@/styles/global.css";
+import { ViewTransitions } from "astro:transitions";
+import  store from "@/store";
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>{title}</title>
+    <!-- <ViewTransitions /> -->
+  </head>
+  <body
+    class="flex dark:bg-gradient-to-r from-deep-blue to-darker-blue w-full mx-auto h-full border-0 border-purple-border no-scrollbar"
+  >
+    <main class="flex w-full h-full">
+      <slot />
+    </main>
+  </body>

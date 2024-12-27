@@ -1,0 +1,17 @@
+---
+import { HEADER_TOKEN, Headers } from "@/constants";
+import { ManageFxVendorComponent } from "@/components/ui/react/manage-fx-vendor-component";
+import FxAdminLayout from "@/layouts/FxAdminLayout.astro";
+
+const { vendor } = Astro.params;
+//@ts-ignore
+const vendorData = await fetch(
+  `${process.env.API_ENDPOINT}/v1/fx/manage-vendors/?${new URLSearchParams({ vendor }).toString()}`,
+  { headers: Headers }
+);
+const { vendor: result } = await vendorData.json();
+---
+
+<FxAdminLayout title={`Vendor | ` + result?.firstName}>
+  <ManageFxVendorComponent result={result} token={HEADER_TOKEN} client:load />
+</FxAdminLayout>

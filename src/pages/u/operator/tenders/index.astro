@@ -1,0 +1,33 @@
+---
+import OperatorLayout from "../../../../layouts/OperatorLayout.astro";
+import Text from "../../../../components/Text.astro";
+import { TendersDataTable } from "../../../../components/ui/react/tender-data-table";
+import { TenderFormSheet } from "../../../../components/ui/react/tender-form-sheet";
+import { HEADER_TOKEN, Headers } from "@/constants";
+
+const res = await fetch(`${process.env.API_ENDPOINT}/v1/tenders`, {
+  headers: Headers,
+});
+const tenders = await res.json();
+const role = Astro.locals.user?.user?.role;
+
+const bucketName = import.meta.env.BUCKET_NAME;
+---
+
+<OperatorLayout title="Tenders">
+  <div
+    class="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-8 mt-24 mb-8 h-full rounded-2xl"
+  >
+    <div class="flex justify-between">
+      <Text type="p" content="Tenders" className="!font-bold text-xl" />
+      <TenderFormSheet
+        bucketName={bucketName}
+        client:load
+        token={HEADER_TOKEN}
+      />
+    </div>
+    <div class="my-12">
+      <TendersDataTable client:load data={tenders} role={role} />
+    </div>
+  </div>
+</OperatorLayout>

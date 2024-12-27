@@ -1,0 +1,11 @@
+---
+import OperatorLayout from "../../../layouts/OperatorLayout.astro";
+import AdminStats from "../../../components/AdminStats.astro";
+import {getStatsData} from "../../../utilities/helpers/getStatsData"
+
+const { data } = await getStatsData();
+---
+
+<OperatorLayout title="Dashboard | Operator">
+  <AdminStats data={data} />
+</OperatorLayout>

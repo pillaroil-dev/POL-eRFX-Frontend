@@ -1,0 +1,26 @@
+---
+import Text from "../../../../components/Text.astro";
+import { BidPlacementDataTable } from "@/components/ui/react/bid-placments-data-table";
+import OperatorLayout from "@/layouts/OperatorLayout.astro";
+import { Headers } from "@/constants";
+
+const res = await fetch(`${process.env.API_ENDPOINT}/v1/bids/bid-placement`, {
+  headers: Headers,
+});
+const bids = await res.json();
+
+const role = Astro.locals?.user?.user?.role;
+---
+
+<OperatorLayout title="Bids">
+  <div
+    class="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-8 mt-24 mb-8 h-full rounded-2xl"
+  >
+    <div class="flex justify-between">
+      <Text type="p" content="Bids" className="!font-bold text-xl" />
+    </div>
+    <div class="my-12">
+      <BidPlacementDataTable client:load data={bids?.data} role={role} />
+    </div>
+  </div>
+</OperatorLayout>

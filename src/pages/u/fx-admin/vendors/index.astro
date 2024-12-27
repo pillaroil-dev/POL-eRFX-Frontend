@@ -1,0 +1,32 @@
+---
+import Text from "../../../../components/Text.astro";
+import { HEADER_TOKEN, Headers } from "@/constants";
+import FxAdminLayout from "@/layouts/FxAdminLayout.astro";
+import { FxVendorDataTable } from "@/components/ui/react/fx-vendor-data-table";
+import { FxVendorFormSheet } from "@/components/ui/react/fx-vendor-form-sheet";
+
+const res = await fetch(`${process.env.API_ENDPOINT}/v1/fx/fx-vendors`, {
+  headers: Headers,
+});
+const allVendors = await res.json();
+const vendors = allVendors.filter(
+  (vendor: { user: { role: string } }) => vendor?.user?.role === "fx-user"
+);
+
+const role = Astro?.locals.user?.user?.role;
+
+---
+
+<FxAdminLayout title="Fx Vendors">
+  <div
+    class="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-4 md:p-8 mt-24 mb-8 h-full rounded-2xl"
+  >
+    <div class="flex justify-between">
+      <Text type="p" content="Fx Vendors" className="!font-bold text-xl" />
+      <FxVendorFormSheet token={HEADER_TOKEN} client:load />
+    </div>
+    <div class="my-12">
+      <FxVendorDataTable data={vendors} role={role} client:load />
+    </div>
+  </div>
+</FxAdminLayout>

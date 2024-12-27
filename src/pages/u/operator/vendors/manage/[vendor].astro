@@ -1,0 +1,17 @@
+---
+import { HEADER_TOKEN, Headers } from "@/constants";
+import OperatorLayout from "../../../../../layouts/OperatorLayout.astro";
+import { ManageVendorComponent } from "@/components/ui/react/manage-vendor-component";
+
+const { vendor } = Astro.params;
+//@ts-ignore
+const vendorData = await fetch(
+  `${process.env.API_ENDPOINT}/v1/vendors/manage-vendor/?${new URLSearchParams({ vendor }).toString()}`,
+  { headers: Headers }
+);
+const { vendor: result } = await vendorData.json();
+---
+
+<OperatorLayout title={`Vendor | ` + result?.companyName}>
+  <ManageVendorComponent result={result} token={HEADER_TOKEN} client:load />
+</OperatorLayout>

@@ -1,0 +1,63 @@
+---
+import { Icon } from "astro-icon/components";
+import { Input } from "./ui/react/input";
+import Text from "./Text.astro";
+import { Switch } from "./ui/react/switch";
+import { AvatarComponent } from "@/components/ui/react/avatar-component";
+import { Headers } from "@/constants";
+
+const { role } = Astro.props;
+
+const name = Astro.locals?.user?.companyName || (Astro.locals?.user?.firstName + " " + Astro.locals?.user?.lastName);
+const userRole = Astro.locals?.user?.user?.role;
+
+const res = await fetch(`${import.meta.env.API_ENDPOINT}/v1/settings`, {headers: Headers});
+const { data } = await res?.json();
+const appLogo = data?.settings[0].appLogo;
+const appName = data?.settings[0].appName;
+---
+
+<div
+  class="flex ml-20 h-20 bg-white dark:bg-natural w-[calc(100%-5rem)] py-2 border-b dark:border-b-slate-700 fixed z-50"
+>
+  <div class="flex w-full gap-x-20 justify-between text-foreground pt-4 px-4">
+    <div class="w-2/5 flex gap-x-2 justify-start items-center">
+      <img src={appLogo} width={20} height="auto" alt="logo" />
+      <h1 class="text-xl font-bold">{appName}</h1>
+    </div>
+    <div
+      class="w-full px-2 py-1 rounded-md bg-slate-100 dark:bg-natural/90 border dark:border-slate-100 text-sm hidden md:flex"
+    >
+      <Icon
+        name="majesticons:search-line"
+        size={40}
+        class="text-foreground p-2"
+      />
+      <Input
+        type="search"
+        placeholder="Search..."
+        className="bg-transparent w-full focus:border-dotted pl-4 focus:outline-none"
+      />
+    </div>
+    <div
+      class="hidden md:flex px-6 bg-slate-100 dark:bg-natural dark:hover:bg-natural hover:bg-slate-100 text-foreground border border-t-primary self-center rounded-lg"
+    >
+      <Text type="h1" content={role} className="!font-semibold !text-sm py-1" />
+    </div>
+
+    <div
+      class="flex w-full gap-10 items-center bg-transparent text-foreground justify-end"
+    >
+      <!-- <Icon name="majesticons:bell" size={24} /> -->
+      <div class="flex gap-x-4 items-center">
+        <Switch client:load />
+        <AvatarComponent
+          alt={`name`}
+          src={``}
+          fallbackText={name}
+          client:load
+        />
+      </div>
+    </div>
+  </div>
+</div>

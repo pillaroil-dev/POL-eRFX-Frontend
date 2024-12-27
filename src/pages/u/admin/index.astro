@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import AdminStats from "../../../components/AdminStats.astro";
+import { getStatsData } from "../../../utilities/helpers/getStatsData";
+
+const { data } = await getStatsData();
+
+---
+
+<AdminLayout title="Dashboard | Admin">
+  <AdminStats data={data} />
+</AdminLayout>

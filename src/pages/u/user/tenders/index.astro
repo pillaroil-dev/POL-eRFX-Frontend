@@ -1,0 +1,28 @@
+---
+import UserLayout from "../../../../layouts/UserLayout.astro";
+import Text from "../../../../components/Text.astro";
+import { BidsDataTable } from "../../../../components/ui/react/bid-data-table";
+import { Headers } from "@/constants";
+
+const id = Astro.locals?.user?.id;
+const params = new URLSearchParams();
+params.append("id", String(id));
+
+const res = await fetch(
+  `${process.env.API_ENDPOINT}/v1/bids?${params.toString()}`, {headers: Headers}
+);
+const result = await res.json();
+---
+
+<UserLayout title="Tenders">
+  <div
+    class="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-8 mt-24 mb-8 h-full rounded-2xl"
+  >
+    <div class="flex justify-between">
+      <Text type="p" content="Tenders" className="!font-bold text-xl" />
+    </div>
+    <div class="my-12">
+      <BidsDataTable data={result?.data} client:load />
+    </div>
+  </div>
+</UserLayout>

@@ -1,0 +1,168 @@
+---
+import { Icon } from "astro-icon/components";
+import { Badge } from "./ui/react/badge";
+import { formatDate } from "@/utilities/helpers/time-formatter";
+
+
+const result = Astro.locals.bids;
+const userBids = result?.data;
+
+const activeBid = userBids?.filter((bid) => bid.status === "open")?.length;
+const totalBids = userBids?.length;
+
+//check for accepted bids
+const acceptedBidPlacements = userBids?.reduce((accumulator, bid) => {
+  const acceptedPlacements =
+    bid.tender?.BidPlacement?.filter(
+      (placement) => placement.status === "accepted"
+    )?.length || 0;
+  return accumulator + acceptedPlacements;
+}, 0);
+
+//check for rejcted bids
+const rejectedBidPlacements = userBids?.reduce((accumulator, bid) => {
+  const acceptedPlacements =
+    bid.tender?.BidPlacement?.filter(
+      (placement) => placement.status === "rejected"
+    )?.length || 0;
+  return accumulator + acceptedPlacements;
+}, 0);
+
+//get total documents uploaded by user
+const documents = userBids?.reduce((accumulator, item) => {
+  if (item.tender) {
+    const filesCount =
+      item?.tender?.BidPlacement?.reduce(
+        (count, placement) => count + placement?.files?.length,
+        0
+      ) || 0;
+    accumulator.push(filesCount);
+  }
+  return accumulator;
+}, []);
+
+const totalDocuments = documents.reduce((total, count) => total + count, 0);
+
+const tenders = userBids?.map(({ tender }) => {
+  return tender;
+});
+---
+
+<div class="flex flex-col gap-x-4 ml-20 w-[calc(100%-5rem)] px-4 mt-24 mb-8">
+  <div>
+    <h1 class="font-semibold text-2xl text-foreground my-8">Dashboard</h1>
+  </div>
+
+  <div class="flex gap-x-6">
+    <div class="w-1/4 bg-slate-100 dark:bg-natural rounded-lg p-4 shadow-md">
+      <h2 class="font-semibold text-foreground text-lg mb-2">Active</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {activeBid > 0 ? activeBid : 0}
+        </p>
+        <Icon
+          name="majesticons:analytics"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Total tenders</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {totalBids}
+        </p>
+        <Icon
+          name="majesticons:analytics-line"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Documents submitted</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {totalDocuments}
+        </p>
+        <Icon
+          name="majesticons:analytics-plus-line"
+          size={40}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+    <div
+      class="w-1/4 bg-slate-100 dark:bg-natural font-semibold text-foreground rounded-lg p-4 shadow-md"
+    >
+      <h2 class="font-semibold text-lg mb-2">Won/Lost</h2>
+      <span class="flex justify-between">
+        <p class="text-gray-500 dark:text-gray-300 text-4xl font-bold">
+          {acceptedBidPlacements + "/" + rejectedBidPlacements}
+        </p>
+        <Icon
+          name="majesticons:analytics-restricted-line"
+          size={43}
+          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+        />
+      </span>
+    </div>
+  </div>
+
+  <div class="flex flex-col mt-12">
+    <h3 class="text-xl font-medium my-4 text-foreground">Tender Invites</h3>
+    <table
+      class="w-full border-collapse border border-gray-200 dark:border-gray-700 text-foreground"
+    >
+      <thead>
+        <tr class="bg-slate-100 dark:bg-primary text-foreground text-left">
+          <th class="py-4 px-4 font-semibold">Title</th>
+          <th class="py-4 px-4 font-semibold">Location</th>
+          <th class="py-4 px-4 font-semibold">Start date</th>
+          <th class="py-4 px-4 font-semibold">End date</th>
+          <th class="py-4 px-4 font-semibold">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          tenders?.slice(0, 5).map((item) => (
+            <tr class="border-t border-gray-200 dark:border-gray-700">
+              <td class="py-4 px-4">{item?.title}</td>
+              <td class="py-4 px-4">{item?.location}</td>
+              <td class="py-4 px-4">{formatDate(item?.startDate)}</td>
+              <td class="py-4 px-4">{formatDate(item?.endDate)}</td>
+              <td class="py-4 px-4">
+                {item?.status === "pending" ? (
+                  <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">
+                    {item?.status}
+                  </Badge>
+                ) : item?.status === "sent" ? (
+                  <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">
+                    {`pending`}
+                  </Badge>
+                ) : item?.status === "closed" ? (
+                  <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">
+                    {item?.status}
+                  </Badge>
+                ) : item?.status === "open" ? (
+                  <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">
+                    {item?.status}
+                  </Badge>
+                ) : (
+                  <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">
+                    {item?.status}
+                  </Badge>
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

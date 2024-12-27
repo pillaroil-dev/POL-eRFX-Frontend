@@ -1,0 +1,67 @@
+---
+import { Icon } from "astro-icon/components";
+import Text from "./Text.astro";
+import LogoutComponent from "./ui/react/logout-component";
+
+const { upperMenu, lowerMenu } = Astro.props;
+const url = Astro.url.pathname;
+---
+
+<nav
+  class="w-20 flex flex-col bg-slate-100 dark:bg-natural border-r-0 border-purple-border fixed h-full"
+>
+  <div class="flex flex-col h-full relative items-center justify-between">
+    <div
+      class="flex flex-col items-center justify-center h-full text-foreground gap-6"
+    >
+      {
+        upperMenu.map(({ name, icon, link }) => (
+          <span class="flex flex-col items-center justify-center group">
+            <Text
+              type="p"
+              content={name}
+              className={`font-bold text-[14px] invisible group-hover:visible group-hover:hover:visible ${url === link && "visible"} `}
+            />
+            <a href={link}>
+              <Icon
+                name={icon}
+                size={24}
+                class={`${url.includes(link) ? "text-primary" : ""}`}
+              />
+            </a>
+          </span>
+        ))
+      }
+    </div>
+
+    <div class="flex flex-col gap-y-4 my-8 text-foreground">
+      {
+        lowerMenu.map(({ name, icon, link }) => (
+          <span class="flex flex-col items-center justify-center group">
+            <Text
+              type="p"
+              content={name}
+              className="font-bold text-[14px] invisible group-hover:visible group-hover:hover:vicible"
+            />
+            <a href={link}>
+              <Icon
+                name={icon}
+                size={24}
+                class={`${url.includes(link) ? "text-primary" : ""}`}
+              />
+            </a>
+          </span>
+        ))
+      }
+      <!-- Logout icon -->
+      <span class="flex flex-col items-center justify-center group">
+        <Text
+          type="p"
+          content={`Log out`}
+          className="font-bold text-[14px] invisible group-hover:visible group-hover:hover:vicible"
+        />
+        <LogoutComponent client:load />
+      </span>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,31 @@
+---
+import { ManageBidPlacementComponent } from "@/components/ui/react/manage-bid-placement-component";
+import { HEADER_TOKEN, Headers } from "@/constants";
+import { decryptDocumentPassword } from "@/utilities/helpers/verifyUser";
+import OperatorLayout from "@/layouts/OperatorLayout.astro";
+
+const { bid } = Astro.params;
+//@ts-ignore
+const res = await fetch(
+  `${process.env.API_ENDPOINT}/v1/bids/manage-bid-placement/?${new URLSearchParams({ bid }).toString()}`,
+  { headers: Headers }
+);
+
+const data = await res.json();
+
+const password = data?.bid?.documentPassword;
+const docPassword = decryptDocumentPassword(password);
+const bucketPublicDomain = import.meta.env.BUCKET_PUBLIC_DOMAIN;
+
+
+---
+
+<OperatorLayout title={`Bid | ${data?.bid?.contractor?.companyName}`}>
+  <ManageBidPlacementComponent
+    documentPassword={docPassword ? docPassword : password}
+    client:load
+    result={data?.bid}
+    token={HEADER_TOKEN}
+    bucketPublicDomain={bucketPublicDomain}
+  />
+</OperatorLayout>

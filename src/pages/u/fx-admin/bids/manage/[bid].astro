@@ -1,0 +1,18 @@
+---
+import FxLayout from "../../../../../layouts/FxLayout.astro";
+import { HEADER_TOKEN, Headers } from "@/constants";
+import { ManageFxBidComponent } from "../../../../../components/ui/react/manage-fx-bid-component";
+import FxAdminLayout from "@/layouts/FxAdminLayout.astro";
+
+const { bid } = Astro.params;
+//@ts-ignore
+const res = await fetch(
+  `${process.env.API_ENDPOINT}/v1/fx/manage-fx-bid/?${new URLSearchParams({ bid }).toString()}`,
+  { headers: Headers }
+);
+const result = await res?.json();
+---
+
+<FxAdminLayout title=`Manage Fx Bid | ${result[0]?.fxBid?.fx?.title}`>
+  <ManageFxBidComponent token={HEADER_TOKEN} data={result} client:load />
+</FxAdminLayout>

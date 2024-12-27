@@ -1,0 +1,13 @@
+---
+import OperatorLayout from "../../../layouts/OperatorLayout.astro";
+import reportStore from "@/store/reports";
+import ReportComponent from "@/components/ui/react/report-component";
+
+const report = reportStore.getState().$reports;
+---
+
+<script src="/objectexporter.min.js" is:inline></script>
+
+<OperatorLayout title="Report">
+  <ReportComponent report={report} client:load />
+</OperatorLayout>

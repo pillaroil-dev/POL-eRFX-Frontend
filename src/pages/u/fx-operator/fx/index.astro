@@ -1,0 +1,28 @@
+---
+import { Headers } from "../../../../constants";
+import Text from "../../../../components/Text.astro";
+import { FXDataTable } from "../../../../components/ui/react/fx-data-table";
+import { FxFormSheet } from "../../../../components/ui/react/fx-form-sheet";
+import FxLayout from "../../../../layouts/FxLayout.astro";
+
+const res = await fetch(`${process.env.API_ENDPOINT}/v1/fx`, {headers: Headers});
+const {data} = await res.json();
+const token = Headers['x-pol-rfx-secret'];
+
+const role = Astro.locals.user.user.role;
+
+---
+
+<FxLayout title="Add Fx Tender">
+  <div
+    class="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-8 mt-24 mb-8 h-full rounded-2xl"
+  >
+    <div class="flex justify-between">
+      <Text type="p" content="Fx" className="!font-bold text-xl" />
+      <FxFormSheet token={token} client:load />
+    </div>
+    <div class="my-12">
+      <FXDataTable role={role} data={data} client:load />
+    </div>
+  </div>
+</FxLayout>

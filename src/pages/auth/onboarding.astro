@@ -1,0 +1,8 @@
+---
+import AuthLayout from "../../layouts/AuthLayout.astro";
+import {OnboardingForm} from "@/components/ui/react/onboarding-form"
+---
+
+<AuthLayout title="Onboarding">
+  <OnboardingForm slot="auth-slot" client:load />
+</AuthLayout>

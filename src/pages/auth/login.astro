@@ -1,0 +1,19 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import LoginForm from "@/components/ui/react/login-form";
+const token = process.env.X_POL_RFX_SECRET;
+
+const isLoggedIn = Astro.locals.isLoggedIn;
+if (isLoggedIn) {
+  return Astro.redirect('/u');
+}
+---
+
+<AuthLayout title="Login | POL eRFX">
+  <div class="flex justify-end flex-end" slot="auth-slot">
+    <a href="/auth/signup">
+      <p>Sign up</p>
+    </a>
+  </div>
+  <LoginForm slot="auth-slot" token={token} client:load />
+</AuthLayout>

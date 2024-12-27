@@ -1,0 +1,29 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+---
+
+<AuthLayout title="Congratulations">
+  <div
+    class="flex flex-col w-full h-full"
+    slot="auth-slot"
+  >
+    <h1 class="font-semibold text-3xl my-6">Congratulations</h1>
+
+    <p class="text text-slate-500">
+      You're fully registered on Pillar Bid. 
+    </p>
+    <p class="text-xs my-2 text-slate-500">
+      Always ensure you follow the guiding rules.
+    </p>
+    <div class="w-full flex flex-col my-12 items-center mx-auto">
+      <img src="/congratulations.png" alt="congratulations"/>
+    </div>
+  </div>
+</AuthLayout>
+
+
+<script is:inline>
+setTimeout(() => {
+    window.location.href = "/u"
+}, 2000);
+</script>

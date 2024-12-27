@@ -1,0 +1,206 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Bid {
+  id              Int        @id @default(autoincrement())
+  status          String
+  submissionDate  DateTime   @map("submission_date")
+  lastUpdatedDate DateTime   @updatedAt @map("last_updated")
+  contractorId    Int        @map("contractor_id")
+  tenderId        Int        @map("tender_id")
+  contractor      Contractor @relation(fields: [contractorId], references: [id])
+  tender          Tender     @relation(fields: [tenderId], references: [id])
+
+  @@index([contractorId], map: "idx_bid_contractorId")
+  @@map("bid")
+}
+
+model Tender {
+  id              Int            @id @default(autoincrement())
+  title           String
+  description     String
+  location        String
+  startDate       DateTime
+  endDate         DateTime
+  status          String
+  submissionDate  DateTime       @map("submission_date")
+  lastUpdatedDate DateTime       @updatedAt @map("last_updated")
+  bids            Bid[]
+  BidPlacement    BidPlacement[]
+  files           File[]
+  items           Item[]
+  recipients      Recipients[]
+
+  @@map("tender")
+}
+
+model Item {
+  id       Int     @id @default(autoincrement())
+  name     String
+  cost     String?
+  unit     String?
+  tenderId Int     @map("tender_id")
+  quantity Int
+  tender   Tender  @relation(fields: [tenderId], references: [id])
+
+  @@map("item")
+}
+
+model File {
+  id             Int           @id @default(autoincrement())
+  name           String
+  size           Int
+  path           String
+  tenderId       Int?          @map("tender_id")
+  bidPlacementId Int?          @map("bid_placement_id")
+  bidPlacement   BidPlacement? @relation("BidPlacementFiles", fields: [bidPlacementId], references: [id])
+  tender         Tender?       @relation(fields: [tenderId], references: [id])
+
+  @@map("file")
+}
+
+model Contractor {
+  id                 Int            @id @default(autoincrement())
+  userId             Int?           @unique
+  email              String?        @unique
+  businessPhone      String?        @map("business_phone")
+  companyName        String?        @map("company_name")
+  homePhone          String?        @map("home_phone")
+  falconRegistration Boolean        @default(false) @map("falcon_registration")
+  address            String?
+  Bid                Bid[]
+  BidPlacement       BidPlacement[]
+  user               User?          @relation(fields: [userId], references: [id])
+  recipient          Recipients[]
+
+  @@map("contractor")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String
+  role       String?     @default("user")
+  verified   Boolean     @default(false)
+  Contractor Contractor?
+  fxBidder   Fxbidder?
+
+  @@map("user")
+}
+
+model Recipients {
+  id           Int         @id @default(autoincrement())
+  contractorId Int?        @map("contractor_id")
+  tenderId     Int?        @map("tender_id")
+  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+  tender       Tender?     @relation(fields: [tenderId], references: [id])
+
+  @@map("recipients")
+}
+
+model Settings {
+  id           Int     @id
+  appName      String? @map("app_name")
+  appUrl       String? @map("app_url")
+  appLogo      String? @map("app_logo")
+  smtpHost     String? @map("smtp_host")
+  smtpPassword String? @map("smtp_password")
+  smtpPort     String? @map("smtp_port")
+  smtpUser     String? @map("smtp_user")
+
+  @@map("settings")
+}
+
+model Fxbidder {
+  id             Int              @id @default(autoincrement())
+  firstName      String?          @map("first_name")
+  lastName       String?          @map("last_name")
+  email          String?          @unique
+  businessPhone  String?          @map("business_phone")
+  userId         Int?             @unique
+  FxRecipients   FxRecipients[]
+  FxBid          FxBid[]
+  FxBidPlacement FxBidPlacement[]
+  user           User?            @relation(fields: [userId], references: [id])
+
+  @@map("fx_bidder")
+}
+
+model Fx {
+  id              Int            @id @default(autoincrement())
+  title           String
+  amount          String
+  status          String
+  submissionDate  DateTime       @map("submission_date")
+  lastUpdatedDate DateTime       @updatedAt @map("last_updated")
+  currency        String
+  endTime         DateTime       @map("end_time")
+  note            String
+  startTime       DateTime       @map("start_time")
+  FxRecipients    FxRecipients[]
+  FxBid           FxBid[]
+
+  @@map("fx")
+}
+
+model FxRecipients {
+  id         Int       @id @default(autoincrement())
+  fxBidderId Int?      @map("fx_bidder_id")
+  fxId       Int?      @map("fx_id")
+  fxBidder   Fxbidder? @relation(fields: [fxBidderId], references: [id])
+  fx         Fx?       @relation(fields: [fxId], references: [id])
+
+  @@map("fx-recipients")
+}
+
+model BidPlacement {
+  id               Int        @id @default(autoincrement())
+  status           String     @default("placed")
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  documentPassword String?    @map("document_password")
+  contractorId     Int        @map("contractor_id")
+  tenderId         Int        @map("tender_id")
+  contractor       Contractor @relation(fields: [contractorId], references: [id])
+  tender           Tender     @relation(fields: [tenderId], references: [id])
+  files            File[]     @relation("BidPlacementFiles")
+
+  @@map("bid_placements")
+}
+
+model FxBid {
+  id             Int              @id @default(autoincrement())
+  fxId           Int              @map("fx_id")
+  bidderId       Int              @map("bidder_id")
+  amount         String
+  status         String           @default("pending")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  bidder         Fxbidder         @relation(fields: [bidderId], references: [id])
+  fx             Fx               @relation(fields: [fxId], references: [id])
+  FxBidPlacement FxBidPlacement[]
+
+  @@map("fx_bid")
+}
+
+model FxBidPlacement {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("placed")
+  amount    String
+  bidderId  Int      @map("bidder_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  fxBidId   Int      @map("fx_bid_id")
+  bidder    Fxbidder @relation(fields: [bidderId], references: [id])
+  fxBid     FxBid    @relation(fields: [fxBidId], references: [id])
+
+  @@map("fx_bid_placement")
+}

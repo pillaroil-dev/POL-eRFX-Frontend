@@ -1,0 +1,17 @@
+---
+import FxLayout from "../../../../../layouts/FxLayout.astro";
+import { HEADER_TOKEN, Headers } from "@/constants";
+import ManageFxComponent from "@/components/ui/react/manage-fx-component";
+
+const { fx } = Astro.params;
+//@ts-ignore
+const res = await fetch(
+  `${process.env.API_ENDPOINT}/v1/fx/manage-fx/?${new URLSearchParams({ fx }).toString()}`,
+  { headers: Headers }
+);
+const result = await res?.json();
+---
+
+<FxLayout title=`Manage Fx Tenders | ${result?.fx?.title}`>
+  <ManageFxComponent token={HEADER_TOKEN} data={result} client:load />
+</FxLayout>

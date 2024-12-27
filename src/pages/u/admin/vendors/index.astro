@@ -1,0 +1,32 @@
+---
+import { VendorDataTable } from "../../../../components/ui/react/vendor-data-table";
+import { VendorFormSheet } from "../../../../components/ui/react/vendor-form-sheet";
+import Text from "../../../../components/Text.astro";
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import { HEADER_TOKEN, Headers } from "@/constants";
+
+const res = await fetch(`${process.env.API_ENDPOINT}/v1/vendors`, {
+  headers: Headers,
+});
+const allVendors = await res.json();
+const vendors = allVendors.filter(
+  (vendor: { user: { role: string } }) => vendor.user.role === "user"
+);
+
+const role = Astro.locals.user?.user?.role;
+
+---
+
+<AdminLayout title="Vendors">
+  <div
+    class="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-4 md:p-8 mt-24 mb-8 h-full rounded-2xl"
+  >
+    <div class="flex justify-between">
+      <Text type="p" content="Vendors" className="!font-bold text-xl" />
+      <VendorFormSheet token={HEADER_TOKEN} client:load />
+    </div>
+    <div class="my-12">
+      <VendorDataTable data={vendors} role={role} client:load />
+    </div>
+  </div>
+</AdminLayout>

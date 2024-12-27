@@ -1,0 +1,50 @@
+---
+import "@/styles/global.css";
+---
+
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Forbidden!</title>
+    <link
+      href="./assets/images/favicon.png"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+  </head>
+  <body class="w-full flex flex-col my-12">
+    <div
+      class="flex flex-col justify-center items-center align-middle self-center mx-auto"
+    >
+      <img
+        class="justify-center items-center align-middle self-center mx-auto"
+        src="/404.svg"
+      />
+      <span class="bg-primary rounded-lg -mt-12">
+        <p class="!text-white text-3xl font-bold py-2 px-4">403 Forbidden</p>
+      </span>
+      <br />
+      <h3 class="!text-foreground text-center font-medium text-lg">
+        You're lost in space
+        <br /> You are not authorization for this action.
+      </h3>
+      <br />
+      <p class="text-foreground text-center font-medium text-xs">
+        You will be redirected shortly
+      </p>
+    </div>
+  </body>
+</html>
+
+<script is:inline>
+  //redirect in 5 seconds
+  setTimeout(() => {
+    window.location.href = "/auth/login";
+  }, 3000);
+</script>
+     

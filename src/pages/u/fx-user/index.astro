@@ -1,0 +1,21 @@
+---
+import FxUserLayout from "../../../layouts/FxUserLayout.astro";
+import { HEADER_TOKEN } from "@/constants";
+import FxUserComponent from "@/components/ui/react/fx-user-component";
+
+const userId = Astro.locals?.user?.id;
+
+const res = await fetch(`${import.meta.env.API_ENDPOINT}/v1/fx/fetch-fx?userId=${userId}`, {
+  headers: {
+    "content-type": "application/json",
+    "x-pol-rfx-secret": HEADER_TOKEN,
+  },
+});
+
+
+const data = await res.json();
+---
+
+<FxUserLayout title="Dashboard | User">
+  <FxUserComponent token={HEADER_TOKEN} client:load data={data} />
+</FxUserLayout>
