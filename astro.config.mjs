@@ -14,8 +14,18 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
+  site: 'https://app.polrfx.ng',
   server:{
 		port: 9000,
 		host: true
+	},
+	vite:{
+		ssr: {
+			noExternal: ['path-to-regexp'],
+		  },
+		preview: {
+			port: 9000,
+			host: true
+		}
 	}
 });
