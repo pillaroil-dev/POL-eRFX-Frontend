@@ -7,14 +7,14 @@ import { AvatarComponent } from "@/components/ui/react/avatar-component";
 import { Headers } from "@/constants";
 
 const { role } = Astro.props;
-
 const name = Astro.locals?.user?.companyName || (Astro.locals?.user?.firstName + " " + Astro.locals?.user?.lastName);
-const userRole = Astro.locals?.user?.user?.role;
 
 const res = await fetch(`${import.meta.env.API_ENDPOINT}/v1/settings`, {headers: Headers});
 const { data } = await res?.json();
+
 const appLogo = data?.settings[0].appLogo;
 const appName = data?.settings[0].appName;
+
 ---
 
 <div
@@ -25,9 +25,7 @@ const appName = data?.settings[0].appName;
       <img src={appLogo} width={20} height="auto" alt="logo" />
       <h1 class="text-xl font-bold">{appName}</h1>
     </div>
-    <div
-      class="w-full px-2 py-1 rounded-md bg-slate-100 dark:bg-natural/90 border dark:border-slate-100 text-sm hidden md:flex"
-    >
+    <div class="w-full px-2 py-1 rounded-md bg-slate-100 dark:bg-natural/90 border dark:border-slate-100 text-sm hidden md:flex">
       <Icon
         name="majesticons:search-line"
         size={40}
@@ -50,7 +48,7 @@ const appName = data?.settings[0].appName;
     >
       <!-- <Icon name="majesticons:bell" size={24} /> -->
       <div class="flex gap-x-4 items-center">
-        <Switch client:load />
+        <Switch client:only="react" />
         <AvatarComponent
           alt={`name`}
           src={``}

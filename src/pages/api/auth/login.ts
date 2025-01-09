@@ -1,41 +1,62 @@
 import type { APIRoute } from 'astro';
-import { PrismaClient } from '@prisma/client'
-import { decodePassword } from '../../../utilities/helpers/verifyUser';
-import jwt from 'jsonwebtoken'
+import { decodePassword } from '@/utilities/helpers/verifyUser';
+import jwt from 'jsonwebtoken';
+import { prisma } from '@/utilities/helpers/prismaInstace';
+import { AuthRefreshTokenStorage } from '@/utilities/helpers/redisStorage';
 
-const prisma = new PrismaClient()
+export const POST: APIRoute = async ({ request, session }) => {
+    try {
+        // Set security header
+        request.headers.set("x-pol-rfx-secret", process.env.X_POL_RFX_SECRET);
 
+        const { email, password } = await request.json();
 
-export const POST: APIRoute = async ({ request, redirect, cookies }) => {
-    let x_pol_rfx_secret = process.env.X_POL_RFX_SECRET;
-    request.headers.set("x-pol-rfx-secret", `${x_pol_rfx_secret}`);
-    
-    const data = await request.json();
-    const { email, password } = data;
+        if (!email || !password) {
+            return new Response(JSON.stringify({
+                message: "Email and password are required"
+            }), { status: 400 });
+        }
 
-    const user = await prisma.user.findFirst({
-        where: {
-            email: email as string,
-        },
-    })
-
-    const decodedPassword = decodePassword(password as string, user?.password);
-
-    if (decodedPassword) {
-        // Generate a token for the user
-        const token = jwt.sign({ email: user.email, role: user.role }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
+        const user = await prisma.user.findUnique({
+            where: { email },
+            select: { email: true, password: true, role: true, id: true }
         });
-        cookies.set(process.env.COOKIE_NAME, token, { path: "/", expires: new Date(Date.now() + 60 * 60 * 24 * 1000), httpOnly: true, maxAge: 60 * 60 * 24 });
+
+        if (!user || !decodePassword(password, user.password)) {
+            return new Response(JSON.stringify({
+                message: "Invalid credentials"
+            }), { status: 401 });
+        }
+
+        const tokenPayload = { email: user.email, role: user.role };
+
+        // Generate tokens in parallel
+        const [token, refreshToken] = await Promise.all([
+            jwt.sign(tokenPayload, process.env.JWT_SECRET, { 
+                expiresIn: parseInt(process.env.JWT_EXPIRES_IN)
+            }),
+            jwt.sign(tokenPayload, process.env.JWT_SECRET, { 
+                expiresIn: parseInt(process.env.JWT_REFRESH_EXPIRES_IN)
+            })
+        ]);
+        // Store tokens in Redis in parallel
+        await Promise.all([
+            // Store tokens in session instead (making eah session identifiable using the user id)
+            session.set(`user_${user.id}`, token),
+            // store refreshToken in memory
+            AuthRefreshTokenStorage.setItem(`${user.id}`, refreshToken, {
+                ttl: parseInt(process.env.JWT_REFRESH_EXPIRES_IN)
+            })
+        ]);
 
         return new Response(JSON.stringify({
-            message: "Login successful", 
-        }), { status: 200 })
-    }
+            message: "Login successful"
+        }), { status: 200 });
 
-    return new Response(JSON.stringify({
-        message: "Login failed. Try again.",
-    }), {
-        status: 400
-    })
+    } catch (error) {
+        console.error('Login error:', error);
+        return new Response(JSON.stringify({
+            message: "Internal server error"
+        }), { status: 500 });
+    }
 };

@@ -3,9 +3,9 @@ import {
   ADMIN_OTP_EMAIL,
   APPROVE_SIGN_IN_HTML,
   FROM_NAME,
-} from "../../constants/notifications/email";
+} from "@/constants/notifications/email";
 
-import { transporter } from "../../utilities/helpers/emailTransporter";
+import { transporter } from "@/utilities/helpers/emailTransporter";
 
 const role = Astro.locals?.user?.user?.role;
 const signInUser = Astro.locals?.user?.companyName; // in this case, company name is either operator or fx admin name
@@ -54,4 +54,6 @@ if (role) {
 if (!isLoggedIn || !role) {
   return Astro.redirect("/auth/login", 302);
 }
+
+// Astro.redirect(`/u/user`, 302);
 ---
