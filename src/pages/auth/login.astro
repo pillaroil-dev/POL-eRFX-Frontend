@@ -1,12 +1,14 @@
 ---
 import AuthLayout from "@/layouts/AuthLayout.astro";
 import LoginForm from "@/components/ui/react/login-form";
-const token = process.env.X_POL_RFX_SECRET;
 
+
+//TODO: change this logic to use session instead.
 const isLoggedIn = Astro.locals.isLoggedIn;
 if (isLoggedIn) {
   return Astro.redirect('/u');
 }
+
 ---
 
 <AuthLayout title="Login | POL eRFX">
@@ -15,5 +17,5 @@ if (isLoggedIn) {
       <p>Sign up</p>
     </a>
   </div>
-  <LoginForm slot="auth-slot" token={token} client:load />
+  <LoginForm slot="auth-slot" client:only='react' />
 </AuthLayout>
