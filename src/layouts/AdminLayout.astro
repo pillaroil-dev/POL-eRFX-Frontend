@@ -3,9 +3,8 @@ import "@/styles/global.css";
 import { Toaster } from "@/components/ui/react/sonner";
 import DashboardHeader from "@/components/DashboardHeader.astro";
 import Sidebar from "@/components/Sidebar.astro";
-import { ViewTransitions } from "astro:transitions";
-import LoadingIndicator from "astro-loading-indicator/component";
 import { menu } from "@/utilities/helpers/menu";
+
 
 interface Props {
   title: string;
@@ -22,8 +21,6 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <!-- <ViewTransitions /> -->
-    <LoadingIndicator color="#2563eb" />
   </head>
   <body
     class="flex dark:bg-background-color w-full mx-auto h-full border-0 border-purple-border no-scrollbar"
@@ -38,4 +35,5 @@ const { title } = Astro.props;
 </html>
 
 
-<script src="../utilities//helpers/themeScript.js"></script>
+<script src="./../utilities/helpers/themeScript.js"></script>
+<script src="./../utilities/helpers/inactivityCheck.ts"></script>

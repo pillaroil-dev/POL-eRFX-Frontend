@@ -4,14 +4,14 @@ import { menu } from "../utilities/helpers/menu";
 import { Toaster } from "../components/ui/react/sonner";
 import DashboardHeader from "../components/DashboardHeader.astro";
 import Sidebar from "../components/Sidebar.astro";
-// import { ViewTransitions } from "astro:transitions";
+// import { ClientRouter } from 'astro:transitions';
+// import ProgressBar from 'astro-vtbot/components/ProgressBar.astro';
 
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
-
 const id = Astro.locals?.user?.id;
 const params = new URLSearchParams();
 params.append("id", String(id));
@@ -27,8 +27,8 @@ const res = await fetch(
 );
 
 const result = await res.json();
-
 Astro.locals.bids = result;
+
 ---
 
 <!doctype html>
@@ -40,7 +40,9 @@ Astro.locals.bids = result;
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <!-- <ViewTransitions /> -->
+    <Toaster client:load richColors position="top-right" />
+    <!-- <ClientRouter />
+    <ProgressBar /> -->
   </head>
   <body
     class="flex dark:bg-background-color w-full mx-auto h-full no-scrollbar"
@@ -50,7 +52,14 @@ Astro.locals.bids = result;
       <Sidebar upperMenu={menu.user.upper} lowerMenu={menu.user.lower} />
       <slot />
     </main>
-    <Toaster client:load richColors position="top-right" />
   </body>
 </html>
-<script src="../utilities//helpers/themeScript.js"></script>
+
+<!-- <style is:global>
+  .swup-progress-bar {
+    background-color: rgb(255, 159, 3);
+  }
+</style> -->
+
+<script src="./../utilities/helpers/themeScript.js"></script>
+<script src="./../utilities/helpers/inactivityCheck.ts"></script>

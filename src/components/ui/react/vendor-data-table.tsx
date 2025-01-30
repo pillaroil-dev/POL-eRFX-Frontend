@@ -84,7 +84,7 @@ export function VendorDataTable({ data, role }: { data: Vendor[], role: string }
             accessorKey: "userId",
             header: "Id",
             cell: ({ row }) => (
-                <div className="uppercase">{"POL eRFX-V" + row.getValue("userId")}</div>
+                <div className="uppercase">{"PUID" + row.getValue("userId")}</div>
             ),
         },
         {
@@ -113,14 +113,14 @@ export function VendorDataTable({ data, role }: { data: Vendor[], role: string }
             id: "falconRegistration",
             header: 'Reg. Type', //use Reg. Type as the name to satisfy the boolean value of falcon registration 
             cell: ({ getValue }) => (
-                <div className="capitalize font-semibold">{String(getValue())}</div>
+                <div className="capitalize font-medium">{String(getValue())}</div>
             ),
         },
         {
             accessorFn: (row) => row.user.verified ? 'Yes' : 'No',
             id: 'verified',
             header: 'Verified',
-            cell: ({ getValue }) => (String(getValue()) === 'No' ? <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge>),
+            cell: ({ getValue }) => (String(getValue()) === 'No' ? <p className="text-red-600 font-medium uppercase">{String(getValue())}</p> : <p className="text-green-600 font-medium uppercase">{String(getValue())}</p>),
         },
         {
             id: "actions",

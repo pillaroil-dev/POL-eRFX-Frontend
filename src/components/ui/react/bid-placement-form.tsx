@@ -69,8 +69,8 @@ export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, toke
                 <h2 className="text-lg font-medium text-foreground">Tender Details:</h2>
                 <div className="flex flex-row justify-between my-4">
                     <div className="space-y-2">
-                        <span className="font-bold flex gap-x-2 text-foreground">Tender ID: <p className="font-medium uppercase">{`POL eRFX-T` + bidData?.tender?.id}</p> </span>
-                        <span className="font-bold flex gap-x-2 text-foreground">Status: {bidData?.status === 'pending' ? <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">{bidData?.status}</Badge> : bidData?.status === 'sent' ? <Badge className="bg-primary hover:bg-primary px-4 text-[10px] text-slate-200">{bidData?.status}</Badge> : bidData?.status === 'closed' ? <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">{bidData?.status}</Badge> : bidData?.status === 'open' ? <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">{bidData?.status}</Badge> : <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">{bidData?.status}</Badge>}</span>
+                        <span className="font-bold flex gap-x-2 text-foreground">Tender ID: <p className="font-medium uppercase">{`PTID` + bidData?.tender?.id}</p> </span>
+                        <span className="font-bold flex gap-x-2 text-foreground">Status: {bidData?.status === 'pending' ? <p className="capitalize text-gray-500">{bidData?.status}</p> : bidData?.status === 'sent' ? <p className="capitalize text-primary">{bidData?.status}</p> : bidData?.status === 'closed' ? <p className="capitalize text-red-600">{bidData?.status}</p> : bidData?.status === 'open' ? <p className="capitalize text-green-600">{bidData?.status}</p> : <p className="capitalize text-gray-500">{bidData?.status}</p>}</span>
                     </div>
                     <div className="space-y-2">
                         <span className="font-bold flex gap-x-2 text-foreground">Title: <p className="font-medium">{bidData?.tender?.title}</p></span>

@@ -60,7 +60,7 @@ const url = Astro.url.pathname;
           content={`Log out`}
           className="font-bold text-[14px] invisible group-hover:visible group-hover:hover:vicible"
         />
-        <LogoutComponent client:load />
+        <LogoutComponent client:only='react' />
       </span>
     </div>
   </div>

@@ -63,7 +63,7 @@ export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
     return `
             <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
             <h1 style="color: #333; font-size: 24px;">Hi ${companyName}!</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">You have received a tender with ID POL eRFX-T${tenderId}. Ensure to review and send in your bid before the close date.</p>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">You have received a tender with ID PTID${tenderId}. Ensure to review and send in your bid before the close date.</p>
                  <p style="color: #555; font-size: 16px; margin: 20px 0;">Follow the link to see your tender</p>
                 <a href="${process.env.HOST}/u/user/tenders/manage/${tenderId}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">View tender</a>
             </div>

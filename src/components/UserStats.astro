@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 import { Badge } from "./ui/react/badge";
 import { formatDate } from "@/utilities/helpers/time-formatter";
+import Text from "./Text.astro";
 
 
 const result = Astro.locals.bids;
@@ -63,7 +64,7 @@ const tenders = userBids?.map(({ tender }) => {
         <Icon
           name="majesticons:analytics"
           size={40}
-          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+          class="bg-white dark:bg-slate-300 text-primary p-2 rounded-full"
         />
       </span>
     </div>
@@ -78,7 +79,7 @@ const tenders = userBids?.map(({ tender }) => {
         <Icon
           name="majesticons:analytics-line"
           size={40}
-          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+          class="bg-white dark:bg-slate-300 text-primary p-2 rounded-full"
         />
       </span>
     </div>
@@ -93,7 +94,7 @@ const tenders = userBids?.map(({ tender }) => {
         <Icon
           name="majesticons:analytics-plus-line"
           size={40}
-          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+          class="bg-white dark:bg-slate-300 text-primary p-2 rounded-full"
         />
       </span>
     </div>
@@ -108,7 +109,7 @@ const tenders = userBids?.map(({ tender }) => {
         <Icon
           name="majesticons:analytics-restricted-line"
           size={43}
-          class="bg-white dark:bg-slate-300 text-slate-500 p-2 rounded-full"
+          class="bg-white dark:bg-slate-300 text-primary p-2 rounded-full"
         />
       </span>
     </div>
@@ -120,7 +121,7 @@ const tenders = userBids?.map(({ tender }) => {
       class="w-full border-collapse border border-gray-200 dark:border-gray-700 text-foreground"
     >
       <thead>
-        <tr class="bg-slate-100 dark:bg-primary text-foreground text-left">
+        <tr class="bg-primary text-white text-left">
           <th class="py-4 px-4 font-semibold">Title</th>
           <th class="py-4 px-4 font-semibold">Location</th>
           <th class="py-4 px-4 font-semibold">Start date</th>
@@ -138,25 +139,15 @@ const tenders = userBids?.map(({ tender }) => {
               <td class="py-4 px-4">{formatDate(item?.endDate)}</td>
               <td class="py-4 px-4">
                 {item?.status === "pending" ? (
-                  <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">
-                    {item?.status}
-                  </Badge>
+                  <Text className="capitalize text-[10px] text-slate-500" content={item?.status} />
                 ) : item?.status === "sent" ? (
-                  <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">
-                    {`pending`}
-                  </Badge>
+                  <Text className="capitalize text-slate-500" content={`pending`} />
                 ) : item?.status === "closed" ? (
-                  <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">
-                    {item?.status}
-                  </Badge>
+                  <Text className="capitalize !text-red-600" content={item?.status} />
                 ) : item?.status === "open" ? (
-                  <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">
-                    {item?.status}
-                  </Badge>
+                  <Text className="capitalize text-green-600" content={item?.status} />
                 ) : (
-                  <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">
-                    {item?.status}
-                  </Badge>
+                  <Text className="px-4 capitalize text-gray-500" content={item?.status} />
                 )}
               </td>
             </tr>

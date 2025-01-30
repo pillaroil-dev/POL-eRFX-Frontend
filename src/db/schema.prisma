@@ -80,8 +80,22 @@ model Contractor {
   BidPlacement       BidPlacement[]
   user               User?          @relation(fields: [userId], references: [id])
   recipient          Recipients[]
+  members            Member[]       @relation("ContractorMembers")
 
   @@map("contractor")
+}
+
+model Member {
+  id           Int         @id @default(autoincrement())
+  userId       Int         @unique @map("user_id")
+  contractorId Int         @map("contractor_id")
+  role         String      @default("member")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  user         User        @relation(fields: [userId], references: [id])
+  contractor   Contractor  @relation("ContractorMembers", fields: [contractorId], references: [id])
+
+  @@map("member")
 }
 
 model User {
@@ -92,6 +106,7 @@ model User {
   verified   Boolean     @default(false)
   Contractor Contractor?
   fxBidder   Fxbidder?
+  member     Member?
 
   @@map("user")
 }

@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react'
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
-import { uploadItem, removeItemByName } from '@/utilities/helpers/s3config';
 
 export const FileUploader = ({bucketName}: {bucketName: string}) => {
     const [alert, setAlert] = useState('');
@@ -14,15 +13,30 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
         }, 2500)
     }, [alert]);
 
+    const uploadItemPresignedUrl = async ({ bucketName, objectName }: { bucketName: string, objectName: string }) => {
+        const response = await fetch('/api/v1/util/minio-api', {
+            method: 'PUT',
+            body: JSON.stringify({ type: 'upload', bucketName, objectName }),
+        });
+        return response.json();
+    };
+
+    const removeItemByName = async ({ bucketName, objectName }: { bucketName: string, objectName: string }) => {
+        const response = await fetch('/api/v1/util/minio-api', {
+            method: 'DELETE',
+            body: JSON.stringify({ type: 'delete', bucketName, objectName }),
+        });
+        return response.json();
+    };
     // called every time a file's `status` changes
     const handleChangeStatus = ({ meta, file }: any, status: string, files: any[]) => {
         setLoading(true);
         const isDone = files.filter((file) => file.meta.status === 'done').length === files.length;
         if (isDone) {
             (async () => {
-                const uploadUrls = await Promise.all(files.map(file => uploadItem({ bucketName, itemName: file.meta.name })));
+                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ bucketName, objectName: file.meta.name })));
                 const responses = await Promise.all(uploadUrls.map((uploadUrl, index) => {
-                    return fetch(uploadUrl.uploadUrl, {
+                    return fetch(uploadUrl.data, {
                         method: 'PUT',
                         body: files[index]?.file,
                         headers: {
@@ -57,22 +71,11 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
             });
         };
         
-
-        
-
         switch (status) {
             case 'removed':
                 (async () => {
-                    const { deleteUrl } = await removeItemByName({ bucketName, itemName: meta.name });
-                    const response = await fetch(deleteUrl, {
-                        method: 'DELETE',
-                        body: file,
-                        headers: {
-                            'Content-Type': file.type.includes('pdf') ? 'application/pdf' : file.type.includes('doc') || file.type.includes('docx') ? 'application/msword' : 'image/*',
-                        },
-                    });
-
-                    if (response.ok) {
+                    const response  = await removeItemByName({ bucketName, objectName: meta.name });
+                    if (!response.error) {
                         setLoading(false)
                         setAlert('File deleted!');
                     } else {
@@ -94,14 +97,13 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
     return (
         <>
             <Dropzone
-                //getUploadParams={getUploadParams}
                 onChangeStatus={handleChangeStatus}
                 autoUpload={true}
                 accept=".pdf, .png, .jpeg, .jpg, .doc, .docx, .xml, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 classNames={{
-                    dropzone: 'w-full min-h-40 relative bg-white/60 dark:bg-background-color border rounded-md p-6 md:px-2 md:py-4 !text-foreground',
-                    preview: 'flex justify-between !text-foreground h-8 w-full px-2 text-xs ',
-                    previewImage: 'text-foreground',
+                    dropzone: 'w-full min-h-40 relative bg-white/60 dark:bg-background-color border rounded-md p-6 md:px-2 md:py-4 !text-primary',
+                    preview: 'flex justify-between !text-primary h-8 w-full px-2 text-xs ',
+                    previewImage: 'text-primary',
                 }}
             />
             <div className="flex justify-center items-center text-green-500 text-xs text-right">
@@ -110,7 +112,7 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
                 }
-                <p className='text-green-600 text-xs text-right'>{loading ? 'Please wait...' : alert}</p>
+                <p className='text-green-600 text-xs text-right font-semibold'>{loading ? 'Please wait...' : alert}</p>
         </div>
         </>
 

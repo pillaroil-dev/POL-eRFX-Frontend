@@ -17,6 +17,22 @@ const CFR2 = new S3Client({
         secretAccessKey: `55047e846d41e4e45b93c14d3686da279b08a73b74ee602cdf409e7e10d2b192`,
     },
 });
+//Minio
+const minioClient = new S3Client({
+    endpoint: 'http://storage.polrfx.ng:9000',
+    region: 'auto',
+    credentials: {
+        accessKeyId: `t60vdz8Ipq62sdnaQ9KK`,
+        secretAccessKey: `5AuqmMWzMqJUjoIW4cj0wfgeqKJ54Tr1R6mkc7E1`,
+    },
+    forcePathStyle: true,
+});
+
+const listMinioBuckets = async () => {
+    const listBucketCommand = new ListBucketsCommand()
+    const buckets = await minioClient.send(listBucketCommand);
+    return buckets;
+}
 
 const listBuckets = async () => {
     const listBucketCommand = new ListBucketsCommand()
@@ -62,5 +78,6 @@ export {
     createBucket,
     uploadItem,
     removeItemByName,
-    getItemByName
+    getItemByName,
+    listMinioBuckets
 }

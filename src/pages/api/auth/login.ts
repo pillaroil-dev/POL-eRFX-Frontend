@@ -8,7 +8,6 @@ export const POST: APIRoute = async ({ request, session }) => {
     try {
         // Set security header
         request.headers.set("x-pol-rfx-secret", process.env.X_POL_RFX_SECRET);
-
         const { email, password } = await request.json();
 
         if (!email || !password) {
@@ -22,20 +21,32 @@ export const POST: APIRoute = async ({ request, session }) => {
             select: { email: true, password: true, role: true, id: true }
         });
 
-        if (!user || !decodePassword(password, user.password)) {
+        if (!user) {
             return new Response(JSON.stringify({
                 message: "Invalid credentials"
             }), { status: 401 });
         }
 
-        const tokenPayload = { email: user.email, role: user.role };
+        const isPasswordValid = decodePassword(password, user.password);
+
+        if (!isPasswordValid) {
+            return new Response(JSON.stringify({
+                message: "Invalid credentials"
+            }), { status: 401 });
+        }
+
+        const tokenPayload = { 
+            email: user.email, 
+            role: user.role, 
+            id: user.id 
+        };
 
         // Generate tokens in parallel
         const [token, refreshToken] = await Promise.all([
-            jwt.sign(tokenPayload, process.env.JWT_SECRET, { 
+            jwt.sign(tokenPayload, process.env.JWT_SECRET || process.env.JWT_SECRET_OLD, { 
                 expiresIn: parseInt(process.env.JWT_EXPIRES_IN)
             }),
-            jwt.sign(tokenPayload, process.env.JWT_SECRET, { 
+            jwt.sign(tokenPayload, process.env.JWT_SECRET || process.env.JWT_SECRET_OLD, { 
                 expiresIn: parseInt(process.env.JWT_REFRESH_EXPIRES_IN)
             })
         ]);

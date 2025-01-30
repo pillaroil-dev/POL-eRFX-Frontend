@@ -63,8 +63,6 @@ export function BidsDataTable({ data }: { data: any }) {
         return [...data].sort((a, b) => new Date(b.tender.submissionDate).getTime() - new Date(a.tender.submissionDate).getTime());
     }, [data]);
 
-    console.log(sortedData)
-
     const columns: ColumnDef<Bid>[] = [
         {
             id: "select",
@@ -92,7 +90,7 @@ export function BidsDataTable({ data }: { data: any }) {
             accessorKey: "tender.id",
             header: "Id",
             cell: ({ row }) => (
-                <div className="capitalize">{`POL eRFX-T${row.original.tender.id}`}</div>
+                <div className="capitalize">{`PTID${row.original.tender.id}`}</div>
             ),
         },
         {
@@ -137,14 +135,14 @@ export function BidsDataTable({ data }: { data: any }) {
                     </Button>
                 )
             },
-            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : String(getValue()) === 'sent' ? <Badge className="bg-primary hover:bg-primary px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : String(getValue()) === 'closed' ? <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : String(getValue()) === 'open' ? <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge>)
+            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <p className="uppercase font-medium text-slate-500">{String(getValue())}</p> : String(getValue()) === 'sent' ? <p className="uppercase font-medium text-primary">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="uppercase font-medium text-red-600">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="uppercase font-medium text-green-600">{String(getValue())}</p> : <p className="uppercase font-medium text-slate-500">{String(getValue())}</p>)
         },
         {
             accessorKey: "tender.BidPlacement",
             header: "Bid Order",
             cell: ({ row }) => (
-                <div className="capitalize">{row?.original?.tender?.BidPlacement[0]?.status === 'rejected' ? <p className="text-red-600 dark:text-red-400 font-medium text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> :
-                (row?.original?.tender?.BidPlacement[0]?.status === 'accepted' || row?.original?.tender?.BidPlacement[0]?.status === 'placed') ? <p className="text-green-600 dark:text-green-400 font-medium text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> : <p className="text-gray-500 dark:text-gray-500 font-medium text-sm uppercase">{`Not Placed`}</p>}</div>
+                <div className="capitalize">{row?.original?.tender?.BidPlacement[0]?.status === 'rejected' ? <p className="text-red-600 font-medium text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> :
+                (row?.original?.tender?.BidPlacement[0]?.status === 'accepted' || row?.original?.tender?.BidPlacement[0]?.status === 'placed') ? <p className="text-green-600 font-medium text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> : <p className="text-gray-500 dark:text-gray-500 font-medium text-sm uppercase">{`Not Placed`}</p>}</div>
             ),
         },
         {
@@ -173,7 +171,6 @@ export function BidsDataTable({ data }: { data: any }) {
             },
         },
     ];
-
 
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -206,15 +203,15 @@ export function BidsDataTable({ data }: { data: any }) {
         <div className="w-full">
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter title..."
-                    value={table.getColumn("id")?.getFilterValue() as string ?? ''}
+                    placeholder="Filter tender by title..."
+                    value={table.getColumn("tender_title")?.getFilterValue() as string ?? ''}
                     onChange={(event) => {
-                        const column = table.getColumn("id");
+                        const column = table.getColumn("tender_title");
                         if (column) {
                             column.setFilterValue(event.target.value);
                         }
                     }}
-                    className="max-w-sm bg-white dark:bg-background-color"
+                    className="max-w-sm bg-white dark:bg-background-color dark:text-foreground"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -236,7 +233,7 @@ export function BidsDataTable({ data }: { data: any }) {
                                             column.toggleVisibility(!!value)
                                         }
                                     >
-                                        {column.id}
+                                        {column.id.includes('_') ? String(column.columnDef.header) : column.id}
                                     </DropdownMenuCheckboxItem>
                                 )
                             })}

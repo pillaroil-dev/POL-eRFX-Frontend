@@ -8,6 +8,7 @@ const PUBLIC_ROUTE = [
     "/auth/forgot-password",
     "/auth/confirm-otp",
     "/auth/congratulations",
+    "/auth/refresh",
 ];
 
 const PROTECTED_ROUTE = [

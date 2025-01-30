@@ -255,26 +255,21 @@ export function ManageTenderComponent({ result, token, role, bucketPublicDomain 
                                         {
                                             // Display tender status with corresponding badge color
                                             result?.tender?.status === "pending" ? (
-                                                <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[14px] text-slate-200">
+                                                <p className=" uppercase font-bold px-4  text-gray-500">
                                                     {result?.tender?.status}
-                                                </Badge>
-                                            ) : result?.tender?.status === "sent" ? (
-                                                <Badge className="bg-primary hover:bg-primary px-4 text-[14px] text-slate-200">
+                                                </p> ) : result?.tender?.status === "sent" ? (
+                                                <p className=" uppercase font-bold px-4 text-primary">
                                                     {result?.tender?.status}
-                                                </Badge>
-                                            ) : result?.tender?.status === "closed" ? (
-                                                <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[14px] text-slate-200">
+                                                </p> ) : result?.tender?.status === "closed" ? (
+                                                <p className=" uppercase font-bold px-4 text-red-600">
                                                     {result?.tender?.status}
-                                                </Badge>
-                                            ) : result?.tender?.status === "open" ? (
-                                                <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[14px] text-slate-200">
+                                                </p> ) : result?.tender?.status === "open" ? (
+                                                <p className=" uppercase font-bold px-4 text-green-200">
                                                     {result?.tender?.status}
-                                                </Badge>
-                                            ) : (
-                                                <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[14px] text-slate-200">
+                                                </p> ) : (
+                                                <p className=" uppercase font-bold px-4  text-slate-500">
                                                     {result?.tender?.status}
-                                                </Badge>
-                                            )
+                                                </p> )
                                         }
                                     </span>
                                     <span className="w-1/2">
