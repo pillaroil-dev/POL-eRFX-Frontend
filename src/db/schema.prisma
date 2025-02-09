@@ -87,9 +87,13 @@ model Contractor {
 
 model Member {
   id           Int         @id @default(autoincrement())
+  fullname      String
+  email         String
   userId       Int         @unique @map("user_id")
   contractorId Int         @map("contractor_id")
   role         String      @default("member")
+  address      String?
+  phone        String?
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
   user         User        @relation(fields: [userId], references: [id])

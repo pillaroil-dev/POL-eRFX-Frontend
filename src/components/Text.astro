@@ -10,7 +10,7 @@ const {type, content, className} = Astro.props;
     {content}
 </h2> : type === "h3" ? <h3 class={`scroll-m-20 text-2xl font-semibold tracking-tight font-Inter ${className} text-foreground`}>
     {content}
-</h3> : type === "h4" ? <h4 class={`scroll-m-20 text-2xl font-semibold tracking-tight font-Inter ${className} text-foreground`}>
+</h3> : type === "h4" ? <h4 class={`scroll-m-20 text-lg font-semibold tracking-tight font-Inter ${className} text-foreground`}>
     {content}
 </h4> : type === "small" ? <small class={`text-sm font-medium leading-none font-Inter ${className} text-foreground`}>{content}</small> : <p class={`leading-7 font-Inter ${className} text-foreground`}>
     {content}

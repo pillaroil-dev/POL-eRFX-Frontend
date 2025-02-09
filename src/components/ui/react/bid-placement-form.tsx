@@ -70,7 +70,7 @@ export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, toke
                 <div className="flex flex-row justify-between my-4">
                     <div className="space-y-2">
                         <span className="font-bold flex gap-x-2 text-foreground">Tender ID: <p className="font-medium uppercase">{`PTID` + bidData?.tender?.id}</p> </span>
-                        <span className="font-bold flex gap-x-2 text-foreground">Status: {bidData?.status === 'pending' ? <p className="capitalize text-gray-500">{bidData?.status}</p> : bidData?.status === 'sent' ? <p className="capitalize text-primary">{bidData?.status}</p> : bidData?.status === 'closed' ? <p className="capitalize text-red-600">{bidData?.status}</p> : bidData?.status === 'open' ? <p className="capitalize text-green-600">{bidData?.status}</p> : <p className="capitalize text-gray-500">{bidData?.status}</p>}</span>
+                        <span className="font-bold flex gap-x-2 text-foreground">Status: {bidData?.status === 'pending' ? <p className="uppercase text-amber-600">{bidData?.status}</p> : bidData?.status === 'sent' ? <p className="uppercase text-primary">{bidData?.status}</p> : bidData?.status === 'closed' ? <p className="uppercase text-red-600">{bidData?.status}</p> : bidData?.status === 'open' ? <p className="uppercase text-green-600">{bidData?.status}</p> : <p className="uppercase text-amber-600">{bidData?.status}</p>}</span>
                     </div>
                     <div className="space-y-2">
                         <span className="font-bold flex gap-x-2 text-foreground">Title: <p className="font-medium">{bidData?.tender?.title}</p></span>
@@ -101,8 +101,9 @@ export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, toke
                 <hr className="border-primary my-12" />
                 <div className="my-4">
                     {!placementStatus ? <>
-                        <p className="text-sm font-medium text-foreground pt-4 pb-2">Bid Document(s): Ensure to upload all applicable documents before submitting this bid.</p>
-                        <p className="text-xs font-normal pb-4 text-primary/90">Tip: Use a single password for all documents. You can compress multiple documents to a single document before upoading</p>
+                        <p className="text-lg font-medium text-foreground pt-4 pb-2">Bid Document(s): Ensure to upload all applicable documents before submitting this bid.</p>
+                        <p className="text-xs font-light pb-2 text-foreground !text-amber-500">Tip: Use a single password for all documents. You can compress multiple documents to a single document before upoading.</p>
+                        <p className="text-xs font-light pb-4 text-foreground !text-amber-500">Maximum Number Of Files: 25</p>
                         <UserFileUploader status={bidData?.status} bucketName={bucketName} />
                         {/* <div className="flex w-full justify-center relative">
                             <div className="flex w-1/3 gap-6">
@@ -110,13 +111,14 @@ export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, toke
                                 <Eye size={28} className={`${show ? 'text-primary' : 'text-foreground'} mt-11 cursor-pointer`} onClick={() => setShow(!show)} />
                             </div>
                         </div> */}
-                        <hr className="border-primary my-8" />
+                        {/* <hr className="border-primary my-8" /> */}
                         <Button className="bg-primary flex mx-auto my-8 px-12 items-center" disabled={(bidData?.status !== 'open' && true) || loading} onClick={handleBidSubmit}>
                             {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
                             Place Bid
-                        </Button></> : <>
+                        </Button>
+                        </> : 
+                        <>
                             <h2 className="text-lg font-medium text-foreground">Bid Document(s):</h2>
-
                             <div className="w-full flex flex-row justify-between my-4">
                                 <div className="w-full space-y-2">
                                     <FilesListComponent bucketPublicDomain={bucketPublicDomain} data={placementFiles} />

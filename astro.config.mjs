@@ -4,8 +4,6 @@ import tailwind from '@astrojs/tailwind';
 import icon from "astro-icon";
 import node from "@astrojs/node";
 import { loadEnv } from "vite";
-import vtbot from 'astro-vtbot';
-import partytown from '@astrojs/partytown';
 const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, SESSION_NAME, JWT_EXPIRES_IN } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 
@@ -14,7 +12,7 @@ export default defineConfig({
   output: 'server',
   integrations: [react(), tailwind({
     applyBaseStyles: false
-  }), icon(), vtbot(), partytown()],
+  }), icon()],
   adapter: node({
     mode: 'standalone',
   }),
@@ -43,6 +41,9 @@ export default defineConfig({
       ttl: parseInt(JWT_EXPIRES_IN) //session expiration itself
     },
   },
+  // prefetch: {
+  //   prefetchAll: true
+  // },
   site: 'https://app.polrfx.ng',
   server:{
         port: 3000,

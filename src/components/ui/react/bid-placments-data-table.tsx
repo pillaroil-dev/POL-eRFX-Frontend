@@ -81,7 +81,7 @@ export function BidPlacementDataTable({ data, role }: { data: any, role: string 
             accessorKey: "id",
             header: "Id",
             cell: ({ row }) => (
-                <div className="capitalize">{`POL eRFX-B`+row.getValue("id")}</div>
+                <div className="capitalize">{`PBID`+row.getValue("id")}</div>
             ),
         },
         {
@@ -91,13 +91,13 @@ export function BidPlacementDataTable({ data, role }: { data: any, role: string 
                 <div className="capitalize text-clip">{row?.original?.contractor?.companyName}</div>
             ),
         },
-        {
-            accessorKey: "tender.title",
-            header: "Tender",
-            cell: ({ row }) => (
-                <div className="capitalize">{row?.original?.tender?.title}</div>
-            ),
-        },
+        // {
+        //     accessorKey: "tender.title",
+        //     header: "Tender",
+        //     cell: ({ row }) => (
+        //         <div className="capitalize">{row?.original?.tender?.title}</div>
+        //     ),
+        // },
         {
             accessorKey: "createdAt",
             header: "Submission Date",
@@ -105,28 +105,11 @@ export function BidPlacementDataTable({ data, role }: { data: any, role: string 
                 <div className="capitalize">{formatTime(row.getValue("createdAt"))}</div>
             ),
         },
-        // {
-        //     accessorKey: "endDate",
-        //     header: "End Date",
-        //     cell: ({ row }) => (
-        //         <div className="capitalize">{formatTime(row?.original?.tender?.endDate)}</div>
-        //     ),
-        // },
         {
             accessorFn: (row) => row.status,
             accessorKey: "status",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Bid Order
-                        <CaretSortIcon className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
-            cell: ({ getValue }) => (String(getValue()) === 'placed' ? <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200 uppercase">{String(getValue())}</Badge> : String(getValue()) === 'rejected' ? <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200 uppercase">{String(getValue())}</Badge> : String(getValue()) === 'accepted' ? <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200 uppercase">{String(getValue())}</Badge> : <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200 uppercase">{`Error`}</Badge>)
+            header: "Bid Order",
+            cell: ({ getValue }) => (String(getValue()) === 'placed' ? <p className="text-primary uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'rejected' ? <p className="text-red-600 uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'accepted' ? <p className="text-green-600 uppercase font-semibold">{String(getValue())}</p> : <p className="text-amber-600 uppercase font-semibold">{`Error`}</p>)
         },
         {
             id: "actions",
@@ -201,14 +184,6 @@ export function BidPlacementDataTable({ data, role }: { data: any, role: string 
                     value={(table.getColumn('contractor_companyName')?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn("contractor_companyName")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm bg-white dark:bg-background-color"
-                />
-                <Input
-                    placeholder="Filter tender..."
-                    value={(table.getColumn("tender_title")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("tender_title")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm bg-white dark:bg-background-color"
                 />

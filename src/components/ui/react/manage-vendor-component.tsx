@@ -6,16 +6,17 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ReloadAfter } from '@/utilities/helpers/reload';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { VendorStatSheet } from './vendor-stat-sheet';
 
-export function ManageVendorComponent({ result, token }: { result: any;  token: string}) {
+export function ManageVendorComponent({ result, token, role, companyName }: { result: any;  token: string; role?: string; companyName?: string;}) {
 
     const [loading, setLoading] = useState(false);
-    const [vloading, setVLoading] = useState(false);
+    const [verificationLoadingState, setVerificationLoadingState] = useState(false);
     const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
         setDisabled(true);
-    }, [])
+    }, []);
 
     type INPUTS = {
         companyName: string;
@@ -27,10 +28,20 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
             id: number;
             verified: boolean;
         },
-        Bid: []
+        Bid: Array<{
+            tenderId: string;
+            contractorId: string;
+            status?: string;
+        }>,
+        members: [],
+        BidPlacement: Array<{
+            tenderId: string;
+            contractorId: string;
+            status: string;
+        }>,
     };
 
-    //get the input values when the are 
+    //get the input values 
     const [vendor, setVendor] = useState<INPUTS>({
         ...result,
     });
@@ -42,7 +53,6 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
             [e.target.name]: e.target.value
         });
     };
-
 
     //handle the edit and save buttons
     const handleEdit = () => {
@@ -64,7 +74,7 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
     };
 
     const handleVerify = async () => {
-        setVLoading(true);
+        setVerificationLoadingState(true);
         const payload = {
             vendorId: vendor.user.id
         };
@@ -80,7 +90,7 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
             const responseMessage = await res.json();
             
             if (res.status === 200) {
-                setVLoading(false);
+                setVerificationLoadingState(false);
                 toast.success(responseMessage.message);
                 setVendor(prevState => ({
                     ...prevState,
@@ -90,11 +100,11 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
                     }
                 }));
             } else {
-                setVLoading(false);
+                setVerificationLoadingState(false);
                 toast.error(responseMessage.message);
             }
         } catch (error) {
-            setVLoading(false);
+            setVerificationLoadingState(false);
             toast.error('An error occurred during verification');
             console.error(error);
         }
@@ -124,6 +134,41 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
             toast.error(responseMessage.message);
         }
     };
+
+    function VendorStatsCard({ title, count }: { title: string, count: number }) {
+        /**
+         * Creates a map of tenderId and contractorId to their corresponding bidOrder
+         * This is used to display the bid order in the VendorStatsCard
+         */
+        const tenderBidOrderMap = vendor?.BidPlacement?.reduce((acc, curr) => {
+            acc[`${curr.tenderId}_${curr.contractorId}`] = curr.status;
+            return acc;
+        }, {} as Record<string, string>);
+
+        /**
+         * Maps the vendors tender(bid) to include their corresponding bidOrder
+         */
+        const tenderData = vendor.Bid?.map(bid => ({
+            ...bid,
+            bidOrder: tenderBidOrderMap[`${bid.tenderId}_${bid.contractorId}`],
+        }));
+
+        return (
+            <div className="flex flex-col mt-12 items-center bg-background w-40 h-auto p-8 rounded-lg">
+                <p className="text-lg font-semibold text-foreground">{title}</p>
+                <h1 className="text-4xl font-semibold text-foreground">{count}</h1>
+                <VendorStatSheet 
+                    title={title} 
+                    data={ title === 'Members' ? 
+                        vendor?.members : 
+                        tenderData
+                    }
+                    role={role}
+                    companyName={companyName}
+                />
+            </div>
+        )
+    }
     
   return (
       <div className="flex flex-col bg-slate-100 dark:bg-natural gap-x-4 ml-24 w-[calc(100%-7rem)] p-8 mt-24 mb-8 h-full rounded-2xl">
@@ -163,14 +208,14 @@ export function ManageVendorComponent({ result, token }: { result: any;  token: 
                       <div className="flex flex-col justify-center items-center my-8">
                           {vendor?.user?.verified ? <BadgeCheck size={40} className={`text-primary`} /> : <BadgeX size={40} className={`text-foreground`} />}
                           <p className="text-foreground">{vendor?.user?.verified ? 'Verified' : 'Not verified'}</p>
-                          {!vendor?.user?.verified && <Button className='mt-4' onClick={handleVerify} disabled={vloading}>
-                              {vloading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+                          {!vendor?.user?.verified && <Button className='mt-4' onClick={handleVerify} disabled={verificationLoadingState}>
+                              {verificationLoadingState && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
                               Verify vendor</Button>}
                       </div>
                       <div className="flex md:relative absolute -bottom-24 md:-bottom-0">
-                          <div className="flex flex-col mt-12">
-                              <p className="text-lg font-semibold text-foreground">Tenders</p>
-                              <h1 className="text-4xl font-semibold text-foreground">{vendor?.Bid?.length}</h1>
+                          <div className="flex flex-row space-x-8">
+                            <VendorStatsCard title="Tenders" count={vendor?.Bid?.length ?? 0} />
+                            <VendorStatsCard title="Members" count={vendor?.members?.length ?? 0} />
                           </div>
                       </div>
                   </div>

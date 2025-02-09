@@ -2,10 +2,15 @@
 import { Switch } from "./ui/react/switch";
 import { AvatarComponent } from "@/components/ui/react/avatar-component";
 import { Headers } from "@/constants";
+import type { UserData as userDataType } from "@/types/user";
 
-const name = Astro.locals?.user?.companyName || (Astro.locals?.user?.firstName + " " + Astro.locals?.user?.lastName);
+const userData = Astro.locals?.user as unknown as userDataType;
 
-const userData = Astro.locals?.user;
+//For user, admin, fx view
+const name = userData?.companyName || (userData?.firstName + " " + userData?.lastName);
+
+//For member view
+const companyName = userData?.contractor?.companyName;
 
 const res = await fetch(`${import.meta.env.API_ENDPOINT}/v1/settings`, {headers: Headers});
 const { data } = await res?.json();
@@ -32,12 +37,14 @@ const appName = data?.settings[0].appName;
         <AvatarComponent
           userID={userData?.userId}
           email={userData?.email}
-          phone={userData?.businessPhone || userData?.homePhone}
+          phone={userData?.businessPhone || userData?.homePhone || userData?.phone}
           address={userData?.address}
           alt={`name`}
           src={``}
-          fallbackText={name}
+          fallbackText={userData?.role !== "member" ? name : companyName}
           role={userData?.user?.role}
+          fullName={userData?.role !== "member" ? '' : userData?.fullname}
+
           client:only="react"
         />
       </div>

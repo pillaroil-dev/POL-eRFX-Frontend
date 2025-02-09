@@ -255,7 +255,7 @@ export function ManageTenderComponent({ result, token, role, bucketPublicDomain 
                                         {
                                             // Display tender status with corresponding badge color
                                             result?.tender?.status === "pending" ? (
-                                                <p className=" uppercase font-bold px-4  text-gray-500">
+                                                <p className=" uppercase font-bold px-4  text-amber-600">
                                                     {result?.tender?.status}
                                                 </p> ) : result?.tender?.status === "sent" ? (
                                                 <p className=" uppercase font-bold px-4 text-primary">
@@ -264,7 +264,7 @@ export function ManageTenderComponent({ result, token, role, bucketPublicDomain 
                                                 <p className=" uppercase font-bold px-4 text-red-600">
                                                     {result?.tender?.status}
                                                 </p> ) : result?.tender?.status === "open" ? (
-                                                <p className=" uppercase font-bold px-4 text-green-200">
+                                                <p className=" uppercase font-bold px-4 text-green-600">
                                                     {result?.tender?.status}
                                                 </p> ) : (
                                                 <p className=" uppercase font-bold px-4  text-slate-500">

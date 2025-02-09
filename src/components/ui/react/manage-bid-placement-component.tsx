@@ -125,25 +125,25 @@ export function ManageBidPlacementComponent({ result, documentPassword, token, b
                                         >
                                         {
                                             result?.tender?.status === "pending" ? (
-                                                <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[14px] text-slate-200">
+                                                <p className="text-slate-500 capitalize px-2 font-semibold">
                                                     {result?.tender?.status}
-                                                </Badge>
+                                                </p>
                                             ) : result?.tender?.status === "sent" ? (
-                                                <Badge className="bg-primary hover:bg-primary px-4 text-[14px] text-slate-200">
+                                                <p className="text-primary capitalize px-2 font-semibold">
                                                     {result?.tender?.status}
-                                                </Badge>
+                                                </p>
                                             ) : result?.tender?.status === "closed" ? (
-                                                <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[14px] text-slate-200">
+                                                <p className="text-red-600 capitalize px-2 font-semibold">
                                                     {result?.tender?.status}
-                                                </Badge>
+                                                </p>
                                             ) : result?.tender?.status === "open" ? (
-                                                <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[14px] text-slate-200">
+                                                <p className="text-green-600 capitalize px-2 font-semibold">
                                                     {result?.tender?.status}
-                                                </Badge>
+                                                </p>
                                             ) : (
-                                                <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[14px] text-slate-200">
+                                                <p className="text-slate-500 capitalize px-2 font-semibold">
                                                     {result?.tender?.status}
-                                                </Badge>
+                                                </p>
                                             )
                                         }
                                     </span>

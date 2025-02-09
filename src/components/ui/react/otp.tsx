@@ -56,7 +56,7 @@ const OtpInput = ({ length, otp, onOtpChange }: OtpInputProps): JSX.Element => {
                             ref={index === activeOtpIndex ? inputRef : null}
                             onChange={handleOnchange}
                             onKeyDown={(e) => handleOnKeyDown(e, index)}
-                            className="w-full text-center placeholder:text-slate-300 dark:placeholder:text-slate-500 text-2xl font-semibold border-b-2 border-bottom p-2"
+                            className="w-full text-center placeholder:text-slate-400 text-2xl font-semibold border-b border-bottom border-slate-400 p-2"
                             type="text"
                             placeholder={(index + 1).toString()}
                             value={tempOtp[index]}

@@ -87,7 +87,11 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
 
         const user = decoded.role.startsWith('fx-')
             ? await prisma.fxbidder.findFirst(userQueryOptions)
-            : await prisma.contractor.findFirst(userQueryOptions);
+            //@ts-ignore
+            : (await prisma.contractor.findFirst(userQueryOptions) || await prisma.member.findFirst({...userQueryOptions, include: {
+                contractor: true,
+                user: { select: { role: true, verified: true } }
+            }}));
 
         if (user) {
             //@ts-ignore

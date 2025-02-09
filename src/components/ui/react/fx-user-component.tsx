@@ -79,9 +79,17 @@ export default function FxUserComponent({ data, token }: { data: any[], token: s
                         <span className="text-xs">Status</span>
                         {item?.fx?.status === "pending" ||
                         item?.fx?.status === "sent" ? (
-                          <Badge className="bg-gray-500 text-gray-100 !text-xs">
+                          <p className="text-primary font-semibold text-sm">
                             Pending
-                          </Badge>
+                          </p>
+                        ) : item?.fx?.status === "closed" ? (
+                          <p className="text-red-600 font-semibold text-sm">
+                            Closed
+                          </p>
+                        ) : item?.fx?.status === "open" ? (
+                          <p className="text-green-600 font-semibold text-sm">
+                            Open
+                          </p>
                         ) : (
                           item?.fx?.status
                         )}
@@ -91,7 +99,7 @@ export default function FxUserComponent({ data, token }: { data: any[], token: s
                         {formatTime(item?.fx?.startTime)}
                       </span>
                     </li>
-                    <h1 className={`absolute right-5 top-4 text-xs capitalize ${item?.FxBidPlacement[0]?.status === 'accepted' ? 'text-green-600' : item?.FxBidPlacement[0]?.status === 'rejected' ? 'text-red-600' : item?.FxBidPlacement[0]?.status === 'placed' ? 'text-gray-600' : 'text-gray-600 dark:text-gray-400' }`}>
+                    <h1 className={`absolute right-5 top-4 text-xs capitalize ${item?.FxBidPlacement[0]?.status === 'accepted' ? 'text-green-600' : item?.FxBidPlacement[0]?.status === 'rejected' ? 'text-red-600' : item?.FxBidPlacement[0]?.status === 'placed' ? 'text-primary' : 'text-gray-600 dark:text-gray-400' }`}>
                       {!item?.FxBidPlacement[0]?.status ? `Not Placed` : item?.FxBidPlacement[0]?.status}
                     </h1>
                   </div>
@@ -139,20 +147,20 @@ export default function FxUserComponent({ data, token }: { data: any[], token: s
                       {!fxData?.FxBidPlacement?.length ? (
                         fxData?.fx?.status === "pending" ||
                         fxData?.fx?.status === "sent" ? (
-                          <Badge className="bg-gray-500 text-gray-100 !text-xs">
+                          <p className="text-primary font-bold">
                             Pending
-                          </Badge>
+                          </p>
                         ) : (
-                          fxData?.fx?.status
+                          <p className="text-red-600 font-semibold">{fxData?.fx?.status}</p>
                         )
                       ) : (fxData?.FxBidPlacement[0]?.status === "placed" ?
-                            <Badge className="bg-primary hover:bg-unset text-gray-100 !text-xs">
+                            <p className="text-primary font-semibold">
                               {fxData?.FxBidPlacement[0]?.status}
-                            </Badge> : fxData?.FxBidPlacement[0]?.status === "rejected" ? <Badge className="bg-red-600 text-gray-100 hover:bg-unset !text-xs">
+                            </p> : fxData?.FxBidPlacement[0]?.status === "rejected" ? <p className="text-red-600 font-semibold">
                               {fxData?.FxBidPlacement[0]?.status}
-                            </Badge> : <Badge className="bg-green-600 hover:bg-unset text-gray-100 !text-xs">
+                            </p> : <p className="text-green-600 font-semibold">
                               {fxData?.FxBidPlacement[0]?.status}
-                            </Badge>
+                            </p>
                       )}
                     </span>
                   </span>
@@ -162,7 +170,7 @@ export default function FxUserComponent({ data, token }: { data: any[], token: s
                       {fxData?.fx?.note}
                     </p>
                     </span>
-                    {!fxData?.FxBidPlacement?.length && <div className="pt-8 flex gap-4 flex-col">
+                    {(!fxData?.FxBidPlacement?.length && (fxData?.fx?.status === "pending" || fxData?.fx?.status === "sent")) && <div className="pt-8 flex gap-4 flex-col">
                       <label
                         htmlFor="amount"
                         className="block text-sm font-medium"

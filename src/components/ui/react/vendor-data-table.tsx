@@ -120,7 +120,7 @@ export function VendorDataTable({ data, role }: { data: Vendor[], role: string }
             accessorFn: (row) => row.user.verified ? 'Yes' : 'No',
             id: 'verified',
             header: 'Verified',
-            cell: ({ getValue }) => (String(getValue()) === 'No' ? <p className="text-red-600 font-medium uppercase">{String(getValue())}</p> : <p className="text-green-600 font-medium uppercase">{String(getValue())}</p>),
+            cell: ({ getValue }) => (String(getValue()) === 'No' ? <p className="text-red-600 font-semibold uppercase">{String(getValue())}</p> : <p className="text-green-600 font-semibold uppercase">{String(getValue())}</p>),
         },
         {
             id: "actions",

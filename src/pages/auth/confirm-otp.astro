@@ -9,7 +9,7 @@ const otpType = Astro.cookies.get("otp-type")?.value;
 
 <AuthLayout title="OTP Confirmation">
   <OtpComponent
-    client:load
+    client:only="react"
     slot="auth-slot"
     otpValue={Number(otpValue)}
     otpType={otpType}

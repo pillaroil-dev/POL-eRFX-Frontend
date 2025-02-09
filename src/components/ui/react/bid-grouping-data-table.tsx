@@ -1,7 +1,5 @@
 import * as React from "react"
 import {
-    CaretSortIcon,
-    ChevronDownIcon,
     DotsHorizontalIcon,
 } from "@radix-ui/react-icons"
 import {
@@ -18,10 +16,8 @@ import {
 } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/react/button"
-import { Checkbox } from "@/components/ui/react/checkbox"
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
@@ -37,107 +33,50 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/react/table"
-import { Badge } from "./badge"
-import { formatDate, formatTime } from "@/utilities/helpers/time-formatter";
-import { formatCurrency } from "@/utilities/helpers/formatCurrency";
 
-type FX = {
-    title: string;
-    startTime: Date;
-    endTime: Date;
-};
 
-type FXBid = {
-    fx: FX;
-};
 
-type FXBIDS = {
+export type BidPlacement = {
     id: number;
-    title: string;
-    status: string;
-    amount: string;
-    orderStatus: string;
-    startTime: Date;
-    endTime: Date;
-    fxBid?: FXBid;
+    tender: {
+        title: string;
+        status: string;
+    }
+    bids: any[];
 };
 
-export function FXBidsDataTable({ data, role }: { data: FXBIDS[], role: string }) {
+export function BidGroupingDataTable({ data, role }: { data: any, role: string }) {
 
 
-    const columns: ColumnDef<FXBIDS>[] = [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() ? "indeterminate" : false)
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
+    const columns: ColumnDef<BidPlacement>[] = [
         {
             accessorKey: "id",
             header: "Id",
             cell: ({ row }) => (
-                <div className="capitalize">{`PFBID`+row.getValue("id")}</div>
+                <div className="capitalize">{`${`PTID`+row.getValue("id")}`}</div>
             ),
         },
         {
-            accessorKey: "title",
-            header: "Title",
+            accessorKey: "tender.title",
+            header: "Tender (Grouped)",
             cell: ({ row }) => (
-                <div className="capitalize text-clip">{row.original.fxBid?.fx?.title}</div>
+                <div className="capitalize">{row?.original?.tender?.title}</div>
             ),
         },
         {
-            accessorKey: "amount",
-            header: "Amount",
+            accessorKey: "tender.status",
+            header: "Status",
+            // cell: ({ row }) => (
+            //     <div className="capitalize">{row?.original?.tender?.status}</div>
+            // ),
+            cell: ({ getValue }) => (String(getValue()) === 'sent' ? <p className="text-primary uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="text-red-600 uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="text-green-600 uppercase font-semibold">{String(getValue())}</p> : <p className="text-amber-600 uppercase font-semibold">{`Pending`}</p>)
+        },
+        {
+            accessorKey: "bids",
+            header: "Bids",
             cell: ({ row }) => (
-                <div className="uppercase">{formatCurrency(Number(row.original.amount))}</div>
+                <div className="capitalize">{row?.original?.bids?.length}</div>
             ),
-        },
-        {
-            accessorKey: "startTime",
-            header: "Start Time",
-            cell: ({ row }) => (
-                <div className="capitalize">{formatTime(row.original.fxBid?.fx?.startTime)}</div>
-            ),
-        },
-        {
-            accessorKey: "endTime",
-            header: "End Time",
-            cell: ({ row }) => (
-                <div className="capitalize">{formatTime(row.original.fxBid?.fx?.endTime)}</div>
-            ),
-        },
-        {
-            accessorFn: (row) => row.status,
-            accessorKey: "status",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Status
-                        <CaretSortIcon className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
-            cell: ({ getValue }) => (String(getValue()) === 'placed' ? <p className="text-primary uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'rejected' ? <p className="text-red-600 uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'accepted' ? <p className="text-green-600 uppercase font-semibold">{String(getValue())}</p> : <p className="text-amber-600 uppercase font-semibold">{`Error`}</p>)
         },
         {
             id: "actions",
@@ -157,7 +96,9 @@ export function FXBidsDataTable({ data, role }: { data: FXBIDS[], role: string }
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                                <a href={`/u/${role}/bids/manage/${Number(row.original.id)}`}>Manage Fx Bid</a>
+                                <a href={`/u/${role}/bids/view/${row?.original?.id}`}>
+                                    View Bids
+                                </a>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -167,7 +108,9 @@ export function FXBidsDataTable({ data, role }: { data: FXBIDS[], role: string }
     ];
 
 
-    const [sorting, setSorting] = React.useState<SortingState>([{id: "id", desc: true}])
+    const [sorting, setSorting] = React.useState<SortingState>([
+        {id: 'id', desc: true}
+    ])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
@@ -195,43 +138,19 @@ export function FXBidsDataTable({ data, role }: { data: FXBIDS[], role: string }
         },
     })
 
+
+
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
+            <div className="flex items-center py-4 gap-2">
                 <Input
-                    placeholder="Filter title..."
-                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                    placeholder="Filter tender..."
+                    value={(table.getColumn("tender_title")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("title")?.setFilterValue(event.target.value)
+                        table.getColumn("tender_title")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm bg-white dark:bg-background-color"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto bg-white dark:bg-background-color text-foreground border-0">
-                            Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize dark:bg-unset"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
             <div className="rounded-md border dark:border-gray-700">
                 <Table>

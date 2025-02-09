@@ -30,6 +30,20 @@ export const APPROVE_SIGN_UP_HTML = (otp: string | number) => {
             `;
 }
 
+
+export const MEMBER_CREATE_HTML = (password: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account has been created successfully. Your password is:</p>
+                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                    <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${password}</h3>
+                </div>
+                <p style="color: #555; font-size: 14px;">Ensure to change your password after login.</p>
+            </div>
+            `;
+}
+
 export const RESEND_OTP_HTML = APPROVE_SIGN_UP_HTML;
 
 export const ADD_VENDOR_HTML = (companyName: string, token: string) => {
@@ -63,11 +77,20 @@ export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
     return `
             <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
             <h1 style="color: #333; font-size: 24px;">Hi ${companyName}!</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">You have received a tender with ID PTID${tenderId}. Ensure to review and send in your bid before the close date.</p>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new tender with ID PTID${tenderId}. Ensure to review and send in an appropriate bid before the close date.</p>
                  <p style="color: #555; font-size: 16px; margin: 20px 0;">Follow the link to see your tender</p>
                 <a href="${process.env.HOST}/u/user/tenders/manage/${tenderId}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">View tender</a>
             </div>
             `;
+};
+
+export const NEW_BID_NOTIFICATION_HTML = (companyName: string, tenderId: number, tenderName: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+            <h1 style="color: #333; font-size: 24px;">Hi, Admin!</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new bid from <strong>${companyName}</strong> for tender with ID: PTID${tenderId} (${tenderName}). Ensure to review or request for designated approval/rejection before the tender close date.</p>
+            </div>
+        `;
 };
 
 export const ONBOARDING_COMPLETE_HTML = (companyName: string, platform: string) => {

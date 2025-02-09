@@ -82,7 +82,7 @@ export function FxVendorDataTable({ data, role }: { data: Vendor[], role: string
             accessorKey: "userId",
             header: "Id",
             cell: ({ row }) => (
-                <div className="uppercase">{"POL eRFX-XV" + row.getValue("userId")}</div>
+                <div className="uppercase">{"PFVID" + row.getValue("userId")}</div>
             ),
         },
         {
@@ -111,7 +111,7 @@ export function FxVendorDataTable({ data, role }: { data: Vendor[], role: string
             accessorFn: (row) => row.user.verified ? 'Yes' : 'No',
             id: 'verified',
             header: 'Verified',
-            cell: ({ getValue }) => (String(getValue()) === 'No' ? <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge>),
+            cell: ({ getValue }) => (String(getValue()) === 'No' ? <p className="text-red-600 font-semibold uppercase">{String(getValue())}</p> : <p className="text-green-600 font-semibold uppercase">{String(getValue())}</p>),
         },
         {
             id: "actions",

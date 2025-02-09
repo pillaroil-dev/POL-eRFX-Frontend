@@ -1,7 +1,7 @@
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
 import { useEffect, useState } from 'react';
-import { removeItemByName, uploadItem } from '@/utilities/helpers/s3config';
+import { uploadItemPresignedUrl, removeItemByName } from '@/utilities/helpers/fileStorage';
 
 
 export const UserFileUploader = ({status, bucketName}: {status: string, bucketName: string}) => {
@@ -21,9 +21,9 @@ export const UserFileUploader = ({status, bucketName}: {status: string, bucketNa
         const isDone = files.filter((file) => file.meta.status === 'done').length === files.length;
         if (isDone) {
             (async () => {
-                const uploadUrls = await Promise.all(files.map(file => uploadItem({ bucketName, itemName: file.meta.name })));
+                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ bucketName, objectName: file.meta.name })));
                 const responses = await Promise.all(uploadUrls.map((uploadUrl, index) => {
-                    return fetch(uploadUrl.uploadUrl, {
+                    return fetch(uploadUrl.data, {
                         method: 'PUT',
                         body: files[index]?.file,
                         headers: {
@@ -62,16 +62,8 @@ export const UserFileUploader = ({status, bucketName}: {status: string, bucketNa
         switch (status) {
             case 'removed':
                 (async () => {
-                    const { deleteUrl } = await removeItemByName({ bucketName, itemName: meta.name });
-                    const response = await fetch(deleteUrl, {
-                        method: 'DELETE',
-                        body: file,
-                        headers: {
-                            'Content-Type': file.type.includes('pdf') ? 'application/pdf' : file.type.includes('doc') || file.type.includes('docx') ? 'application/msword' : 'image/*',
-                        },
-                    });
-
-                    if (response.ok) {
+                    const response  = await removeItemByName({ bucketName, objectName: meta.name });
+                    if (!response.error) {
                         setLoading(false)
                         setAlert('File deleted!');
                     } else {
@@ -98,6 +90,13 @@ export const UserFileUploader = ({status, bucketName}: {status: string, bucketNa
                 autoUpload={true}
                 multiple={true}
                 maxFiles={25}
+                inputContent="Drag n Drop Files or Click to Browse"
+                styles={{
+                    dropzoneActive: { borderColor: 'green' },
+                    inputLabel:{
+                        color: "#7c3aed"
+                    },
+                }}
                 validate={(file) => {
                     const acceptedFormats = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
                     //@ts-ignore

@@ -12,7 +12,7 @@ export function FilesListComponent({ data, bucketPublicDomain }: { data: any, bu
                       <div className="w-full">
                           <label
                               htmlFor="title"
-                              className="block text-sm font-medium text-gray-500"
+                              className="block text-sm font-medium text-gray-400"
                           >
                               Name
                           </label>

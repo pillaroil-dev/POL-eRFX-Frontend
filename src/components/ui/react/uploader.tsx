@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
+import { removeItemByName, uploadItemPresignedUrl } from '@/utilities/helpers/fileStorage';
 
 export const FileUploader = ({bucketName}: {bucketName: string}) => {
     const [alert, setAlert] = useState('');
@@ -13,21 +14,6 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
         }, 2500)
     }, [alert]);
 
-    const uploadItemPresignedUrl = async ({ bucketName, objectName }: { bucketName: string, objectName: string }) => {
-        const response = await fetch('/api/v1/util/minio-api', {
-            method: 'PUT',
-            body: JSON.stringify({ type: 'upload', bucketName, objectName }),
-        });
-        return response.json();
-    };
-
-    const removeItemByName = async ({ bucketName, objectName }: { bucketName: string, objectName: string }) => {
-        const response = await fetch('/api/v1/util/minio-api', {
-            method: 'DELETE',
-            body: JSON.stringify({ type: 'delete', bucketName, objectName }),
-        });
-        return response.json();
-    };
     // called every time a file's `status` changes
     const handleChangeStatus = ({ meta, file }: any, status: string, files: any[]) => {
         setLoading(true);
@@ -99,6 +85,13 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
             <Dropzone
                 onChangeStatus={handleChangeStatus}
                 autoUpload={true}
+                inputContent="Drag n Drop Files or Click to Browse"
+                styles={{
+                    dropzoneActive: { borderColor: 'green' },
+                    inputLabel:{
+                        color: "#7c3aed"
+                    },
+                }}
                 accept=".pdf, .png, .jpeg, .jpg, .doc, .docx, .xml, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 classNames={{
                     dropzone: 'w-full min-h-40 relative bg-white/60 dark:bg-background-color border rounded-md p-6 md:px-2 md:py-4 !text-primary',

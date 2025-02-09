@@ -119,25 +119,25 @@ export function ManageFxBidComponent({ data, token }: { data: any, token: string
                                             >
                                             {
                                                 bidData?.status === "pending" ? (
-                                                    <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[14px] text-slate-200 uppercase">
+                                                    <p className="text-gray-500 font-semibold uppercase px-2">
                                                         {bidData?.status}
-                                                    </Badge>
+                                                    </p>
                                                 ) : bidData?.status === "sent" ? (
-                                                        <Badge className="bg-primary hover:bg-primary px-4 text-[14px] text-slate-200 uppercase">
+                                                        <p className="text-primary font-semibold uppercase px-2">
                                                         {bidData?.status}
-                                                    </Badge>
+                                                    </p>
                                                 ) : bidData?.status === "rejected" ? (
-                                                            <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[14px] text-slate-200 uppercase">
+                                                            <p className="text-red-600 font-semibold uppercase px-2">
                                                         {bidData?.status}
-                                                    </Badge>
+                                                    </p>
                                                 ) : bidData?.status === "accepted" ? (
-                                                                <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[14px] text-slate-200 uppercase">
+                                                                <p className="text-green-600 font-semibold uppercase px-2">
                                                         {bidData?.status}
-                                                    </Badge>
+                                                    </p>
                                                 ) : (
-                                                                    <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[14px] text-slate-200 uppercase">
+                                                                    <p className="text-gray-500 font-semibol uppercase px-2">
                                                         {bidData?.status}
-                                                    </Badge>
+                                                    </p>
                                                 )
                                             }
                                         </span>
@@ -194,8 +194,8 @@ export function ManageFxBidComponent({ data, token }: { data: any, token: string
                                             </>}
                                         </div>
 
-                                        <div className='flex justify-center mt-8'>
-                                            {(!bidData?.status || bidData?.status !== 'placed') ? <h3 className={`font-semibold text-xl border-2 p-4 rounded-lg ${bidData?.status === 'accepted' ? 'text-green-600 border-green-600 bg-green-50' : bidData?.status === 'rejected' ? 'text-red-600 border-red-600 bg-red-50' : 'hidden'} `}>{bidData?.status.toUpperCase()}</h3> : ''}
+                                        <div className='flex justify-center mt-4'>
+                                            {(!bidData?.status || bidData?.status !== 'placed') ? <h3 className={`font-semibold text-xl ${bidData?.status === 'accepted' ? 'text-green-600' : bidData?.status === 'rejected' ? 'text-red-600' : 'hidden'} `}>{bidData?.status.toUpperCase()}</h3> : ''}
                                         </div>
                                     </div>
                                     

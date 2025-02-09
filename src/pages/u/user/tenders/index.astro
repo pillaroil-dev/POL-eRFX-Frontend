@@ -3,8 +3,12 @@ import UserLayout from "../../../../layouts/UserLayout.astro";
 import Text from "../../../../components/Text.astro";
 import { BidsDataTable } from "../../../../components/ui/react/bid-data-table";
 import { Headers } from "@/constants";
+import {type UserData} from "@/types/user";
 
-const id = Astro.locals?.user?.id;
+
+const userData = Astro.locals?.user as unknown as UserData;
+const id = userData?.contractor?.id ?? userData?.id;
+
 const params = new URLSearchParams();
 params.append("id", String(id));
 

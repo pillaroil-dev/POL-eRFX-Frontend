@@ -1,6 +1,6 @@
 ---
 import Text from "../../../../components/Text.astro";
-import { BidPlacementDataTable } from "@/components/ui/react/bid-placments-data-table";
+import { BidGroupingDataTable } from "@/components/ui/react/bid-grouping-data-table";
 import OperatorLayout from "@/layouts/OperatorLayout.astro";
 import { Headers } from "@/constants";
 
@@ -8,6 +8,19 @@ const res = await fetch(`${process.env.API_ENDPOINT}/v1/bids/bid-placement`, {
   headers: Headers,
 });
 const bids = await res.json();
+
+const groupedData = Object.values(bids?.data.reduce((obj, item) => {
+        const key = item.tenderId;
+        if (!obj[key]) {
+            obj[key] = {
+                id: item.tenderId,
+                tender: {title: item.tender.title, status: item.tender.status},
+                bids: [],
+            };
+        }
+        obj[key].bids.push(item);
+        return obj;
+    }, {}));
 
 const role = Astro.locals?.user?.user?.role;
 ---
@@ -20,7 +33,7 @@ const role = Astro.locals?.user?.user?.role;
       <Text type="p" content="Bids" className="!font-bold text-xl" />
     </div>
     <div class="my-12">
-      <BidPlacementDataTable client:load data={bids?.data} role={role} />
+      <BidGroupingDataTable client:only="react" data={groupedData} role={role} />
     </div>
   </div>
 </OperatorLayout>

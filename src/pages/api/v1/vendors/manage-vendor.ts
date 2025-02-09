@@ -15,7 +15,13 @@ export const GET: APIRoute = async ({ request }) => {
             include: {
                 user: true,
                 BidPlacement: true,
-                Bid: true
+                Bid: {
+                    include: {
+                        tender: true,
+                        contractor: true,
+                    }
+                },
+                members: true,
             }
         });
         if (vendor) {

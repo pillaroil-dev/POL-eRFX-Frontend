@@ -129,7 +129,7 @@ export function FXDataTable({ data, role }: { data: any, role: string }) {
                     </Button>
                 )
             },
-            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : String(getValue()) === 'sent' ? <Badge className="bg-primary hover:bg-primary px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : String(getValue()) === 'closed' ? <Badge className="bg-red-600 hover:bg-red-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : String(getValue()) === 'open' ? <Badge className="bg-green-600 hover:bg-green-600 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge> : <Badge className="bg-gray-500 hover:bg-gray-500 px-4 text-[10px] text-slate-200">{String(getValue())}</Badge>)
+            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <p className="text-amber-600 uppercase">{String(getValue())}</p> : String(getValue()) === 'sent' ? <p className="text-primary uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="text-red-600 uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="text-green-600 uppercase font-semibold">{String(getValue())}</p> : <p className="text-amber-600 uppercase">{String(getValue())}</p>)
         },
         {
             id: "actions",

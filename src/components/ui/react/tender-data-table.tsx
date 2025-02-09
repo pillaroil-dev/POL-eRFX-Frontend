@@ -128,7 +128,7 @@ export function TendersDataTable({ data, role }: { data: any, role: string }) {
                     </Button>
                 )
             },
-            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <p className="text-gray-500 uppercase font-medium px-4">{String(getValue())}</p> : String(getValue()) === 'sent' ? <p className="text-primary uppercase font-medium px-4">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="text-red-600 uppercase font-medium px-4">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="text-green-600 uppercase font-medium px-4">{String(getValue())}</p> : <p className="text-slate-500 uppercase font-medium px-4">{String(getValue())}</p>)
+            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <p className="text-amber-600 uppercase font-semibold px-4">{String(getValue())}</p> : String(getValue()) === 'sent' ? <p className="text-primary uppercase font-semibold px-4">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="text-red-600 uppercase font-semibold px-4">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="text-green-600 uppercase font-semibold px-4">{String(getValue())}</p> : <p className="text-slate-500 uppercase font-semibold px-4">{String(getValue())}</p>)
         },
         {
             id: "actions",

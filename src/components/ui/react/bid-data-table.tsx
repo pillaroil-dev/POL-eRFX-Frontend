@@ -135,14 +135,14 @@ export function BidsDataTable({ data }: { data: any }) {
                     </Button>
                 )
             },
-            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <p className="uppercase font-medium text-slate-500">{String(getValue())}</p> : String(getValue()) === 'sent' ? <p className="uppercase font-medium text-primary">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="uppercase font-medium text-red-600">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="uppercase font-medium text-green-600">{String(getValue())}</p> : <p className="uppercase font-medium text-slate-500">{String(getValue())}</p>)
+            cell: ({ getValue }) => (String(getValue()) === 'pending' ? <p className="uppercase font-semibold text-amber-600">{String(getValue())}</p> : String(getValue()) === 'sent' ? <p className="uppercase font-semibold text-primary">{String(getValue())}</p> : String(getValue()) === 'closed' ? <p className="uppercase font-semibold text-red-600">{String(getValue())}</p> : String(getValue()) === 'open' ? <p className="uppercase font-semibold text-green-600">{String(getValue())}</p> : <p className="uppercase font-semibold text-amber-600">{String(getValue())}</p>)
         },
         {
             accessorKey: "tender.BidPlacement",
             header: "Bid Order",
             cell: ({ row }) => (
-                <div className="capitalize">{row?.original?.tender?.BidPlacement[0]?.status === 'rejected' ? <p className="text-red-600 font-medium text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> :
-                (row?.original?.tender?.BidPlacement[0]?.status === 'accepted' || row?.original?.tender?.BidPlacement[0]?.status === 'placed') ? <p className="text-green-600 font-medium text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> : <p className="text-gray-500 dark:text-gray-500 font-medium text-sm uppercase">{`Not Placed`}</p>}</div>
+                <div className="capitalize">{row?.original?.tender?.BidPlacement[0]?.status === 'rejected' ? <p className="text-red-600 font-semibold text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> :
+                (row?.original?.tender?.BidPlacement[0]?.status === 'accepted' || row?.original?.tender?.BidPlacement[0]?.status === 'placed') ? <p className="text-green-600 font-semibold text-sm uppercase">{row?.original?.tender?.BidPlacement[0]?.status}</p> : <p className="text-amber-600 font-semibold text-sm uppercase">{`Not Placed`}</p>}</div>
             ),
         },
         {

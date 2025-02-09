@@ -3,12 +3,31 @@ import { transporter } from "@/utilities/helpers/emailTransporter";
 import { prisma } from "@/utilities/helpers/prismaInstace";
 import type { APIRoute } from "astro";
 
-
+/**
+ * API endpoint to send a tender to contractors
+ */
 export const POST: APIRoute = async ({ request }) => {
 
     const result = await request.json();
 
     try {
+        // First, get all contractors and their members
+        const contractorsWithMembers = await Promise.all(
+            result.recipientsWithDetails.map(async (recipient) => {
+                const contractor = await prisma.contractor.findUnique({
+                    where: { id: recipient.id },
+                    include: {
+                        members: true
+                    }
+                });
+                return {
+                    ...recipient,
+                    members: contractor?.members || []
+                };
+            })
+        );
+
+        // Create bids for contractors
         const response = await prisma.bid.createMany({
             data: Array.isArray(result.recipientsWithDetails) ? result.recipientsWithDetails.map(recipient => ({
                 status: result.tender.status,
@@ -22,7 +41,6 @@ export const POST: APIRoute = async ({ request }) => {
                 submissionDate: new Date()
             }],
             skipDuplicates: true,
-            
         });
     
         const tenderId = Array.isArray(result.tender) ? result.tender[0].id : result.tender.id;
@@ -47,10 +65,10 @@ export const POST: APIRoute = async ({ request }) => {
                 });
 
                 if (sentTender?.id) {
-                    // Function to send email to all recipients
+                    // Function to send email to all recipients and their members
                     const sendEmailToRecipients = async (recipients) => {
                         for (const recipient of recipients) {
-                            // using the mail transporter and html email template
+                            // Send to contractor
                             try {
                                 await transporter.sendMail({
                                     from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
@@ -58,6 +76,19 @@ export const POST: APIRoute = async ({ request }) => {
                                     subject: "New Tender Alert",
                                     html: ADD_TENDER_HTML(recipient.companyName, sentTender.id),
                                 });
+
+                                // Send to contractor members
+                                const contractor = contractorsWithMembers.find(c => c.id === recipient.id);
+                                if (contractor?.members?.length > 0) {
+                                    for (const member of contractor.members) {
+                                        await transporter.sendMail({
+                                            from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
+                                            to: member.email,
+                                            subject: "New Tender Alert",
+                                            html: ADD_TENDER_HTML(`${member.fullname} (${recipient.companyName} Member)`, sentTender.id),
+                                        });
+                                    }
+                                }
                             } catch (error) {
                                 console.log(error)
                             }

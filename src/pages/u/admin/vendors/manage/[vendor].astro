@@ -1,6 +1,6 @@
 ---
 import { HEADER_TOKEN, Headers } from "@/constants";
-import AdminLayout from "../../../../../layouts/AdminLayout.astro";
+import AdminLayout from "@/layouts/AdminLayout.astro";
 import { ManageVendorComponent } from "@/components/ui/react/manage-vendor-component";
 
 const { vendor } = Astro.params;
@@ -9,8 +9,10 @@ const vendorData = await fetch(
   { headers: Headers }
 );
 const { vendor: result } = await vendorData.json();
+const role = Astro.locals?.user?.user.role;
+
 ---
 
 <AdminLayout title={`Vendor | ` + result?.companyName}>
-  <ManageVendorComponent result={result} token={HEADER_TOKEN} client:load />
+  <ManageVendorComponent result={result} token={HEADER_TOKEN} role={role} companyName={result?.companyName} client:load />
 </AdminLayout>
