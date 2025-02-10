@@ -9,10 +9,7 @@ const { bid } = Astro.params;
 const params = new URLSearchParams();
 params.append("bidId", bid!);
 const res = await fetch(
-  `${process.env.API_ENDPOINT}/v1/bids/manage-bid?${params.toString()}`,
-  {
-    headers: Headers,
-  }
+  `${process.env.API_ENDPOINT}/v1/bids/manage-bid?${params.toString()}`, { headers: Headers }
 );
 const result = await res.json();
 

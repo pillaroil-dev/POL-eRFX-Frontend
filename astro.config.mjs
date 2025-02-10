@@ -41,9 +41,6 @@ export default defineConfig({
       ttl: parseInt(JWT_EXPIRES_IN) //session expiration itself
     },
   },
-  // prefetch: {
-  //   prefetchAll: true
-  // },
   site: 'https://app.polrfx.ng',
   server:{
         port: 3000,
