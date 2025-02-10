@@ -27,7 +27,7 @@ describe('Login endpoint', () => {
                 json: async () => ({ message: "Login successful" })
             } as Response);
 
-            const response = await login({ email: "correct-email@email.com", password: "correct-password" });
+            const response = await login({ email: "correctmail@email.com", password: "correct-password" });
             expect(response.status).toBe(200);
             const responseBody = await response.json();
             expect(responseBody).toMatchObject({ message: "Login successful" });

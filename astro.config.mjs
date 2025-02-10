@@ -26,7 +26,7 @@ export default defineConfig({
         port: parseInt(REDIS_PORT),
         password: REDIS_PASSWORD,
         maxRetries: 10,
-        retryStrategy: (times) => Math.min(times * 50, 2000), // Exponential backoff
+        retryStrategy: (times) => Math.min(times * 50, 2000),
         connectTimeout: 100000, // 100 seconds
         keepAlive: 30000, // 30 seconds
         family: 4, // 4 (IPv4) or 6 (IPv6)

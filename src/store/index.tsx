@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '@/utilities/helpers/prismaInstace';
 
 
+//unused
 interface STORE {
   $loading: boolean;
   $userData: any;
