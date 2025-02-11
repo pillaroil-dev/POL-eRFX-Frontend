@@ -43,19 +43,19 @@ export default defineConfig({
   },
   site: 'https://app.polrfx.ng',
   server:{
-        port: 4321,
+        port: 3000,
         host: '0.0.0.0'
     },
   vite:{
     server: {
-      port: 4321,
+      port: 3000,
       host: true  // Equivalent to '0.0.0.0'
     },
     ssr: {
         noExternal: ['path-to-regexp'],
       },
     preview: {
-        port: 4321,
+        port: 3000,
         host: true
       }
     },
