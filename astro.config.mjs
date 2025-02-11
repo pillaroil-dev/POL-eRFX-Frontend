@@ -46,7 +46,7 @@ export default defineConfig({
         port: 3000,
         host: true
     },
-    vite:{
+  vite:{
         ssr: {
             noExternal: ['path-to-regexp'],
           },
@@ -54,5 +54,10 @@ export default defineConfig({
             port: 3000,
             host: true
         }
-    }
+    },
+    build: {
+      rollupOptions: {
+        external: ['unstorage']
+      }
+    }  
 });
