@@ -49,7 +49,8 @@ export default defineConfig({
   vite:{
     server: {
       port: 3000,
-      host: true  // Equivalent to '0.0.0.0'
+      host: true,  // Equivalent to '0.0.0.0'
+      allowedHosts: true
     },
     ssr: {
         noExternal: ['path-to-regexp'],
