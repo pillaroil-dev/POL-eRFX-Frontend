@@ -44,12 +44,12 @@ export default defineConfig({
   site: 'https://app.polrfx.ng',
   server:{
         port: 3000,
-        host: '0.0.0.0'
+        host: true
     },
   vite:{
     server: {
       port: 3000,
-      host: true,  // Equivalent to '0.0.0.0'
+      host: true,
       allowedHosts: true
     },
     ssr: {
