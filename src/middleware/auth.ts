@@ -1,4 +1,4 @@
-import { prisma } from "@/utilities/helpers/prismaInstace"; // Fixed typo in 'prismaInstace'
+import { prisma } from "@/utilities/helpers/prismaInstace"; 
 import { AuthRefreshTokenStorage, GetTokenByCookieName } from "@/utilities/helpers/redisStorage";
 import { defineMiddleware } from "astro:middleware";
 import jwt, { type JwtPayload } from "jsonwebtoken";
@@ -8,78 +8,76 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     const sessionCookie = await cookies.get(import.meta.env.SESSION_NAME)?.value;
     const jwtSecret = import.meta.env.JWT_SECRET as string;
 
+    // If no session cookie, proceed without setting the user
     if (!sessionCookie) {
+        locals.isLoggedIn = false;
         return next();
     }
 
     const tokenData = await GetTokenByCookieName.get(sessionCookie);
-    const token = tokenData[3]; // based on stored data structure by astro session.
+    const token = tokenData[3];
 
     const x_pol_rfx_secret = process.env.X_POL_RFX_SECRET;
     request.headers.set("x-pol-rfx-secret", x_pol_rfx_secret);
 
     if (!token) {
         console.error("Token is missing from token data.");
+        locals.isLoggedIn = false;
         return redirect('/forbidden', 301);
     }
 
-    //decode the token
     const decoded = jwtDecode(token) as JwtPayload;
-
-    // check if token is valid
     const tokenActive = decoded.exp * 1000 > Date.now();
 
+    // Function to refresh user token
     const refreshUserToken = async () => {
-        //get refresh token
         const refreshToken = await AuthRefreshTokenStorage.getItem(`${decoded.id}`) as string;
         if (!refreshToken) {
-            return;
-        };
+            return null; // No refresh token available
+        }
         const decodedRefreshToken = jwtDecode(refreshToken) as JwtPayload;
 
-        // Generate new access token
-        const tokenPayload = { 
-            email: decodedRefreshToken.email, 
-            role: decodedRefreshToken.role, 
-            id: decodedRefreshToken.id 
-        };
+        if (decodedRefreshToken.exp * 1000 > Date.now()) {
+            const tokenPayload = { 
+                email: decodedRefreshToken.email, 
+                role: decodedRefreshToken.role, 
+                id: decodedRefreshToken.id 
+            };
 
-        if (decodedRefreshToken && decodedRefreshToken.exp * 1000 > Date.now()) {
-           try {
-            const [token, refreshedToken] = await Promise.all([
-                jwt.sign(tokenPayload, jwtSecret, { 
-                    expiresIn: parseInt(import.meta.env.JWT_EXPIRES_IN)
-                }),
-                jwt.sign(tokenPayload, jwtSecret, { 
-                    expiresIn: parseInt(import.meta.env.JWT_REFRESH_EXPIRES_IN)
-                })
-            ]);
-            // Store tokens in Redis in parallel
-            await Promise.all([
-                // Store tokens in session instead (making each session identifiable using the user id)
-                session.set(`user_${tokenPayload.id}`, token),
-                AuthRefreshTokenStorage.setItem(`${tokenPayload.id}`, refreshedToken, {
-                    ttl: parseInt(import.meta.env.JWT_REFRESH_EXPIRES_IN)
-                })
-            ]);
-           } catch (error) {
-            console.log(error);
-           }
-        }else{
-            //destroy the entire session and redirect to login
+            try {
+                const [newToken, refreshedToken] = await Promise.all([
+                    jwt.sign(tokenPayload, jwtSecret, { expiresIn: parseInt(import.meta.env.JWT_EXPIRES_IN) }),
+                    jwt.sign(tokenPayload, jwtSecret, { expiresIn: parseInt(import.meta.env.JWT_REFRESH_EXPIRES_IN) })
+                ]);
+
+                await Promise.all([
+                    session.set(`user_${tokenPayload.id}`, newToken),
+                    AuthRefreshTokenStorage.setItem(`${tokenPayload.id}`, refreshedToken, {
+                        ttl: parseInt(import.meta.env.JWT_REFRESH_EXPIRES_IN)
+                    })
+                ]);
+
+                return newToken; // Return the new token
+            } catch (error) {
+                console.error("Error refreshing token:", error);
+                return null; // Indicate failure
+            }
+        }
+        return null; // Token expired
+    };
+
+    // Refresh token if it's not active
+    if (!tokenActive) {
+        const newToken = await refreshUserToken();
+        if (!newToken) {
             session.destroy();
+            locals.isLoggedIn = false;
             return redirect('auth/login');
         }
-    };
+    }
 
-    //if token isn't active, call the refresh token method.
-    if(!tokenActive){
-        await refreshUserToken();
-    };
-
-
+    // Fetch user data based on the email in the decoded token
     try {
-
         const userQueryOptions = {
             where: { email: decoded.email },
             include: { user: { select: { role: true, verified: true } } }
@@ -87,11 +85,13 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
 
         const user = decoded.role.startsWith('fx-')
             ? await prisma.fxbidder.findFirst(userQueryOptions)
-            //@ts-ignore
-            : (await prisma.contractor.findFirst(userQueryOptions) || await prisma.member.findFirst({...userQueryOptions, include: {
-                contractor: true,
-                user: { select: { role: true, verified: true } }
-            }}));
+            : (await prisma.contractor.findFirst(userQueryOptions) || await prisma.member.findFirst({
+                ...userQueryOptions,
+                include: {
+                    contractor: true,
+                    user: { select: { role: true, verified: true } }
+                }
+            }));
 
         if (user) {
             //@ts-ignore
@@ -99,11 +99,14 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
             locals.isLoggedIn = true;
         } else {
             console.error("User not found for the given email:", decoded.email);
+            locals.isLoggedIn = false;
             return redirect('/forbidden', 301);
         }
     } catch (error) {
         console.error("JWT verification failed:", error);
-        //return redirect('/forbidden', 301);
+        locals.isLoggedIn = false;
+        return redirect('/forbidden', 301);
     }
+
     return next();
 });

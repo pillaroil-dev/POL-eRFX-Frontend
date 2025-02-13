@@ -103,7 +103,7 @@ export function VendorStatSheet({
                 ) : item?.status === "sent" ? (
                   <span className="text-primary font-semibold">{item?.status}</span>
                 ) : (
-                  <span className="font-semibold">{item?.status ?? "Pending"}</span>
+                  <span className="font-semibold text-amber-500">{item?.status ?? "Pending"}</span>
                 )}
               </span>
               <span className="text-sm text-muted-foreground capitalize">
@@ -114,7 +114,7 @@ export function VendorStatSheet({
                 ) : item?.bidOrder === "placed" ? (
                   <span className="text-primary font-semibold">{item?.bidOrder}</span>
                 ) : (
-                  <span className="font-semibold">{item?.bidOrder ?? "Not Placed"}</span>
+                  <span className="font-semibold text-amber-500">{item?.bidOrder ?? "Not Placed"}</span>
                 )}
               </span>
             </div>
