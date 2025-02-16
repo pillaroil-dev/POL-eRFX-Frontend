@@ -102,8 +102,12 @@ export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, toke
                 <div className="my-4">
                     {!placementStatus ? <>
                         <p className="text-lg font-medium text-foreground pt-4 pb-2">Bid Document(s): Ensure to upload all applicable documents before submitting this bid.</p>
-                        <p className="text-xs font-light pb-2 text-foreground !text-amber-500">Tip: Use a single password for all documents. You can compress multiple documents to a single document before upoading.</p>
-                        <p className="text-xs font-light pb-4 text-foreground !text-amber-500">Maximum Number Of Files: 25</p>
+                        <p className="text-xs font-semibold pb-2 text-foreground !text-amber-500">Tip: Use a single password for all documents. You can merge multiple documents to a single document before upoading.  
+                            [<a href="https://www.ilovepdf.com/merge_pdf" target="_blank" className="!text-primary italic" rel="nofollow"> Merge Link 1</a>]
+                            [<a href="https://smallpdf.com/merge-pdf" target="_blank" className="!text-primary italic" rel="nofollow"> Merge Link 2</a>]
+                        </p>
+                        <p className="text-xs font-semibold pb-4 text-foreground !text-amber-500">Maximum Number Of Files: 25</p>
+                        <p className="text-xs font-semibold pb-4 text-foreground !text-red-600 uppercase">Warning: Bid placed CANNOT be re-called/replaced, any mistake will be treated as an invalid bid, hence, disqualified. Verify Bid before placement.</p>
                         <UserFileUploader status={bidData?.status} bucketName={bucketName} />
                         {/* <div className="flex w-full justify-center relative">
                             <div className="flex w-1/3 gap-6">

@@ -84,11 +84,11 @@ export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
             `;
 };
 
-export const NEW_BID_NOTIFICATION_HTML = (companyName: string, tenderId: number, tenderName: string) => {
+export const NEW_BID_NOTIFICATION_HTML = (companyName: string, tenderId: number, tenderName: string, dateAndTime: string) => {
     return `
             <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-            <h1 style="color: #333; font-size: 24px;">Hi, Admin!</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new bid from <strong>${companyName}</strong> for tender with ID: PTID${tenderId} (${tenderName}). Ensure to review or request for designated approval/rejection before the tender close date.</p>
+            <h1 style="color: #333; font-size: 24px;">New Bid Notification</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new bid from <strong>${companyName}</strong> for tender with ID: PTID${tenderId} (${tenderName}) at ${dateAndTime}. Ensure to review or request for designated approval/rejection before the tender close date.</p>
             </div>
         `;
 };

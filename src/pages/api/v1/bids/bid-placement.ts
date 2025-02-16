@@ -35,12 +35,19 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (res.status === "placed") {
         //send email alert to admin/operator
-        console.log(bidData);
+        const dateAndTime = new Date().toLocaleString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        }).replace(',', ' |');
+
         await transporter.sendMail({
             from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
             subject: "New Bid Placement Alert",
             to: import.meta.env.ADMIN_EMAIL,
-            html: NEW_BID_NOTIFICATION_HTML(bidData.contractor.companyName, bidData.tenderId, bidData.tender.title)
+            html: NEW_BID_NOTIFICATION_HTML(bidData.contractor.companyName, bidData.tenderId, bidData.tender.title, dateAndTime)
         });
 
         return new Response(JSON.stringify({ message: "Bid placed succesfully" }), { status: 200 });
