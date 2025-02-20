@@ -1,6 +1,5 @@
 import { EXTEND_END_DATE_OTP_HTML } from "@/constants/notifications/email";
 import { transporter } from "@/utilities/helpers/emailTransporter";
-import { prisma } from "@/utilities/helpers/prismaInstace";
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request }) => {

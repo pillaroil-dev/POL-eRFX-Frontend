@@ -132,6 +132,19 @@ export const EXTEND_END_DATE_OTP_HTML = (otp: number | number) => {
             `;
 };
 
+export const BIDS_ACCESS_VERIFICATION_OTP_EMAIL = (otp: number, bidId: number) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Bids Access Confirmation</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Access the tender bids PTID${bidId}, with the one-time pin (OTP) below:</p>
+                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                    <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${otp}</h3>
+                </div>
+                <p style="color: #555; font-size: 14px;">Keep this code safe. It's valid for 15 minutes.</p>
+            </div>
+            `;
+};
+
 export const BID_ACCEPTANCE_HTML = (companyName: string, title: string) => {
     return `
             <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">

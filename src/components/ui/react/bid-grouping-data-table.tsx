@@ -33,8 +33,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/react/table"
-
-
+import BidControlComponent from "./bid-control-component"
 
 export type BidPlacement = {
     id: number;
@@ -45,8 +44,7 @@ export type BidPlacement = {
     bids: any[];
 };
 
-export function BidGroupingDataTable({ data, role }: { data: any, role: string }) {
-
+export function BidGroupingDataTable({ data, operatorEmail, role }: { data: any, operatorEmail?: string, role: string }) {
 
     const columns: ColumnDef<BidPlacement>[] = [
         {
@@ -95,11 +93,7 @@ export function BidGroupingDataTable({ data, role }: { data: any, role: string }
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <a href={`/u/${role}/bids/view/${row?.original?.id}`}>
-                                    View Bids
-                                </a>
-                            </DropdownMenuItem>
+                            <BidControlComponent bidId={row?.original?.id} status={row?.original?.tender?.status} operatorEmail={operatorEmail} role={role} />
                         </DropdownMenuContent>
                     </DropdownMenu>
                 )

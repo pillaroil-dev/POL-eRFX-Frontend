@@ -23,6 +23,7 @@ const groupedData = Object.values(bids?.data.reduce((obj, item) => {
     }, {}));
 
 const role = Astro.locals?.user?.user?.role;
+const operatorEmail = Astro.locals?.user?.email;
 ---
 
 <OperatorLayout title="Bids">
@@ -33,7 +34,12 @@ const role = Astro.locals?.user?.user?.role;
       <Text type="p" content="Bids" className="!font-bold text-xl" />
     </div>
     <div class="my-12">
-      <BidGroupingDataTable client:only="react" data={groupedData} role={role} />
+      <BidGroupingDataTable 
+        client:only="react" 
+        data={groupedData} 
+        operatorEmail={operatorEmail}
+        role={role}
+      />
     </div>
   </div>
 </OperatorLayout>
