@@ -1,3 +1,7 @@
+
+/*
+Migration error: https://www.prisma.io/docs/orm/prisma-migrate/workflows/patching-and-hotfixing#failed-migration
+*/
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
@@ -102,6 +106,16 @@ model Member {
   @@map("member")
 }
 
+model Admin {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique @map("user_id")
+  user     User   @relation(fields: [userId], references: [id])
+  fullname String  @map("full_name")
+
+  @@map("admin")
+}
+
+
 model User {
   id         Int         @id @default(autoincrement())
   email      String      @unique
@@ -113,6 +127,7 @@ model User {
   member     Member?
 
   @@map("user")
+  Admin Admin?
 }
 
 model Recipients {

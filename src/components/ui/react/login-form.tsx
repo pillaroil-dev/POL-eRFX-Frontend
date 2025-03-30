@@ -6,13 +6,13 @@ import { toast } from 'sonner'
 import { ReloadIcon } from '@radix-ui/react-icons'
 
 export default function LoginForm({token}: {token: string}) {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+
     const handleLogin = async (evt: { preventDefault: () => void }) => {
         evt.preventDefault();
         setLoading(true);
-        const email = (document.querySelector('input[name="email"]') as HTMLInputElement).value;
-        const password = (document.querySelector('input[name="password"]') as HTMLInputElement).value;
-
         (async () => {
             const data = await fetch('/api/auth/login', {
                 method: "post",
@@ -59,12 +59,16 @@ export default function LoginForm({token}: {token: string}) {
                         type="email"
                         placeholder="Email"
                         name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:w-2/3 my-4"
                     />
                     <Input
                         type="password"
                         name="password"
                         placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="flex h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:w-2/3 mb-4"
                     />
                     <div className="flex w-2/3 pb-4 justify-end">

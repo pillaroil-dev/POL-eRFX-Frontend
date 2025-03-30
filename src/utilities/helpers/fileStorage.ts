@@ -1,15 +1,15 @@
-export const uploadItemPresignedUrl = async ({ bucketName, objectName }: { bucketName: string, objectName: string }) => {
+export const uploadItemPresignedUrl = async ({objectName }: {objectName: string }) => {
     const response = await fetch('/api/v1/util/minio-api', {
         method: 'PUT',
-        body: JSON.stringify({ type: 'upload', bucketName, objectName }),
+        body: JSON.stringify({ type: 'upload',objectName }),
     });
     return response.json();
 };
 
-export const removeItemByName = async ({ bucketName, objectName }: { bucketName: string, objectName: string }) => {
+export const removeItemByName = async ({objectName }: {objectName: string }) => {
     const response = await fetch('/api/v1/util/minio-api', {
         method: 'DELETE',
-        body: JSON.stringify({ type: 'delete', bucketName, objectName }),
+        body: JSON.stringify({ type: 'delete',objectName }),
     });
     return response.json();
 };

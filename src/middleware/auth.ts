@@ -14,9 +14,20 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
         return next();
     }
 
+    // const tokenData = await GetTokenByCookieName.get(sessionCookie);
+    // const token = tokenData[3];
     const tokenData = await GetTokenByCookieName.get(sessionCookie);
-    const token = tokenData[3];
+        if (!tokenData) {
+            locals.isLoggedIn = false;
+            return redirect('/auth/login', 301);
+        }
 
+        const token = tokenData[3];
+        if (!token) {
+            locals.isLoggedIn = false;
+            return redirect('/forbidden', 301);
+        }
+    
     const x_pol_rfx_secret = process.env.X_POL_RFX_SECRET;
     request.headers.set("x-pol-rfx-secret", x_pol_rfx_secret);
 
@@ -39,7 +50,7 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
 
         if (decodedRefreshToken.exp * 1000 > Date.now()) {
             const tokenPayload = { 
-                email: decodedRefreshToken.email, 
+                email: decodedRefreshToken.email,  
                 role: decodedRefreshToken.role, 
                 id: decodedRefreshToken.id 
             };
@@ -97,10 +108,6 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
             //@ts-ignore
             locals.user = user as User;
             locals.isLoggedIn = true;
-        } else {
-            console.error("User not found for the given email:", decoded.email);
-            locals.isLoggedIn = false;
-            return redirect('/forbidden', 301);
         }
     } catch (error) {
         console.error("JWT verification failed:", error);

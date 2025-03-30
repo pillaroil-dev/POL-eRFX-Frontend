@@ -9,6 +9,9 @@ import SignupForm from '@/components/ui/react/signup-form';
       <p class="">Login</p>
     </a>
   </div>
-  <SignupForm client:load slot="auth-slot" />
+  <SignupForm 
+    client:only="react" 
+    slot="auth-slot"
+   />
 </AuthLayout>
  

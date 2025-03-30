@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {Button} from '../../../components/ui/react/button';
 import {Input} from '../../../components/ui/react/input';
 import {Badge} from '../../../components/ui/react/badge';
@@ -8,81 +8,113 @@ import { Checkbox } from './checkbox';
 
 
 const OnboardingForm = () => {
-    const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState('bid');
-    const [checked, setChecked] = useState(false)
-    
-
-    const handleSubmit = async () => {
-        setLoading(true);
-
-        if (activeTab === 'bid') {
-            const company_name = (document.querySelector('input[name="company_name"]') as HTMLInputElement).value;
-            const business_phone = (document.querySelector('input[name="business_phone"]') as HTMLInputElement).value;
-            const home_phone = (document.querySelector('input[name="home_phone"]') as HTMLInputElement).value;
-
-            if (!company_name || !business_phone || !home_phone) {
-                setLoading(false)
-                toast.error("All fields are required.");
-                return;
-            }
-
-            const payload = {
-                companyName: company_name,
-                businessPhone: business_phone,
-                homePhone: home_phone,
-                falconRegistration: checked
-            };
-            const res = await fetch("/api/auth/onboarding", {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-            const responseMessage = await res.json();
-            if (res.status === 200) {
-                setLoading(false)
-                toast.success(responseMessage.message)
-                setTimeout(() => {
-                    window.location.replace("/auth/congratulations")
-                }, 1500);
-            } else {
-                setLoading(false)
-                toast.error(responseMessage.message)
-            };
-
-        };
-        if (activeTab === 'fx') {
-            const first_name = (document.querySelector('input[name="first_name"]') as HTMLInputElement).value;
-            const last_name = (document.querySelector('input[name="last_name"]') as HTMLInputElement).value;
-            const business_phone_2 = (document.querySelector('input[name="business_phone_2"]') as HTMLInputElement).value;
-
-            if (!first_name || !last_name || !business_phone_2) {
-                setLoading(false)
-                toast.error("All fields are required.");
-                return;
-            }
-
-            const payload = {
-                firstName: first_name,
-                lastName: last_name,
-                businessPhone: business_phone_2
-            };
-            const res = await fetch("/api/auth/onboarding", {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-            const responseMessage = await res.json();
-            if (res.status === 200) {
-                setLoading(false)
-                toast.success(responseMessage.message)
-                setTimeout(() => {
-                    window.location.replace("/auth/congratulations")
-                }, 1500);
-            } else {
-                setLoading(false)
-                toast.error(responseMessage.message)
-            };
-        };
+    type OnBoardingStateType = {
+        loading: boolean;
+        activeTab: string;
+        checked: boolean;
+        first_name: string;
+        last_name: string;
+        company_name: string;
+        business_phone: string;
+        business_phone_2: string;
+        home_phone: string;
     };
+
+    const [onBoardingState, setOnBoardingState] = useState<OnBoardingStateType>({
+        loading: false,
+        activeTab: 'bid',
+        checked: false,
+        first_name: "",
+        last_name: "",
+        company_name: "",
+        business_phone: "",
+        business_phone_2: "",
+        home_phone: "",
+    });
+
+    async function handleSubmit() {
+        setOnBoardingState((prevState) => ({
+            ...prevState,
+            loading: true,
+        }));
+        if (onBoardingState.activeTab === 'bid') {
+            if (!onBoardingState.company_name || !onBoardingState.business_phone || !onBoardingState.home_phone) {
+            setOnBoardingState((prevState) => ({
+                ...prevState,
+                loading: false,
+            }));
+                toast.error("All fields are required.");
+                return;
+            }
+
+            const payload = {
+                companyName: onBoardingState.company_name,
+                businessPhone: onBoardingState.business_phone,
+                homePhone: onBoardingState.home_phone,
+                falconRegistration: onBoardingState.checked
+            };
+            const res = await fetch("/api/auth/onboarding", {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            const responseMessage = await res.json();
+            if (res.status === 200) {
+                setOnBoardingState((prevState) => ({
+                    ...prevState,
+                    loading: false,
+                }));
+                toast.success(responseMessage.message);
+                setTimeout(() => {
+                    window.location.replace("/auth/congratulations");
+                }, 1500);
+            } else {
+                setOnBoardingState((prevState) => ({
+                    ...prevState,
+                    loading: false,
+                }));
+                toast.error(responseMessage.message);
+            };
+
+        };
+        if (onBoardingState.activeTab === 'fx') {
+
+            if (!onBoardingState.first_name || !onBoardingState.last_name || !onBoardingState.business_phone_2) {
+                setOnBoardingState((prevState) => ({
+                    ...prevState,
+                    loading: false,
+                }));
+                toast.error("All fields are required.");
+                return;
+            }
+
+            const payload = {
+                firstName: onBoardingState.first_name,
+                lastName: onBoardingState.last_name,
+                businessPhone: onBoardingState.business_phone_2
+            };
+            const res = await fetch("/api/auth/onboarding", {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            const responseMessage = await res.json();
+            if (res.status === 200) {
+                setOnBoardingState((prevState) => ({
+                    ...prevState,
+                    loading: false,
+                }));
+                toast.success(responseMessage.message);
+                setTimeout(() => {
+                    window.location.replace("/auth/congratulations");
+                }, 1500);
+            } else {
+                setOnBoardingState((prevState) => ({
+                    ...prevState,
+                    loading: false,
+                }));
+                toast.error(responseMessage.message);
+            };
+        };
+    }
 
     return (
         <div className="flex flex-col w-full h-full">
@@ -96,22 +128,28 @@ const OnboardingForm = () => {
                 <Badge
                     id="bidTab"
                     variant="outline"
-                    className={`px-8 py-2 tab ${activeTab === 'bid' ? 'active bg-gray-600 text-white' : ''} cursor-pointer`}
-                    onClick={() => setActiveTab('bid')}
+                    className={`px-8 py-2 tab ${onBoardingState.activeTab === 'bid' ? 'active bg-gray-600 text-white' : ''} cursor-pointer`}
+                    onClick={() => setOnBoardingState((prevState) => ({
+                        ...prevState,
+                        activeTab: 'bid'
+                    }))}
                 >
                     Bid Onboarding
                 </Badge>
                 <Badge
                     id="fxTab"
                     variant="outline"
-                    className={`px-8 py-2 tab ${activeTab === 'fx' ? 'active bg-gray-600 text-white' : ''} cursor-pointer`}
-                    onClick={() => setActiveTab('fx')}
+                    className={`px-8 py-2 tab ${onBoardingState.activeTab === 'fx' ? 'active bg-gray-600 text-white' : ''} cursor-pointer`}
+                    onClick={() => setOnBoardingState((prevState) => ({
+                        ...prevState,
+                        activeTab: 'fx'
+                    }))}
                 >
                     Fx Onboarding
                 </Badge>
             </div>
 
-            {activeTab === 'bid' && (
+            {onBoardingState.activeTab === 'bid' && (
                 <div id="bidOnboarding" className="onboarding-section">
                     <div className="w-full flex flex-col items-center mx-auto gap-4">
                         {/* Bid onboarding inputs */}
@@ -119,6 +157,11 @@ const OnboardingForm = () => {
                             <Input
                                 type="text"
                                 placeholder="Company name"
+                                value={onBoardingState.company_name}
+                                onChange={(e) => setOnBoardingState((prevState) => ({
+                                    ...prevState,
+                                    company_name: e.target.value,
+                                }))}
                                 name="company_name"
                                 className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-2/3"
                             />
@@ -126,6 +169,11 @@ const OnboardingForm = () => {
                                 type="tel"
                                 placeholder="Business phone"
                                 name="business_phone"
+                                value={onBoardingState.business_phone}
+                                onChange={(e) => setOnBoardingState((prevState) => ({
+                                    ...prevState,
+                                    business_phone: e.target.value
+                                }))}
                                 className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-2/3"
                                 maxLength={11}
                                 minLength={11}
@@ -134,6 +182,11 @@ const OnboardingForm = () => {
                                 type="tel"
                                 placeholder="Home phone"
                                 name="home_phone"
+                                value={onBoardingState.home_phone}
+                                onChange={(e) => setOnBoardingState((prevState) => ({
+                                    ...prevState,
+                                    home_phone: e.target.value
+                                }))}
                                 maxLength={11}
                                 minLength={11}
                                 className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-2/3"
@@ -145,14 +198,17 @@ const OnboardingForm = () => {
                                 >
                                     Are you a Falcon member?
                                 </label>
-                                <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} name="falcon_registration" />
+                                <Checkbox checked={onBoardingState.checked} onCheckedChange={() => setOnBoardingState((prevState) => ({
+                                    ...prevState,
+                                    checked: !onBoardingState.checked,
+                                }))} name="falcon_registration" />
                             </div>
                         </div>
                     </div>
                 </div>
             )}
 
-            {activeTab === 'fx' && (
+            {onBoardingState.activeTab === 'fx' && (
                 <div id="fxOnboarding" className="onboarding-section">
                     <div className="w-full flex flex-col items-center mx-auto gap-4">
                         {/* Fx onboarding inputs */}
@@ -162,11 +218,21 @@ const OnboardingForm = () => {
                                     type="text"
                                     placeholder="First name"
                                     name="first_name"
+                                    value={onBoardingState.first_name}
+                                    onChange={(e) => setOnBoardingState((prevState) => ({
+                                        ...prevState,
+                                        first_name: e.target.value
+                                    }))}
                                     className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-1/2"
                                 />
                                 <Input
                                     type="text"
                                     placeholder="Last name"
+                                    value={onBoardingState.last_name}
+                                    onChange={(e) => setOnBoardingState((prevState) => ({
+                                        ...prevState,
+                                        last_name: e.target.value
+                                    }))}
                                     name="last_name"
                                     className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-1/2"
                                 />
@@ -174,6 +240,11 @@ const OnboardingForm = () => {
                             <Input
                                 type="tel"
                                 placeholder="Business phone"
+                                value={onBoardingState.business_phone_2}
+                                onChange={(e) => setOnBoardingState((prevState) => ({
+                                    ...prevState,
+                                    business_phone_2: e.target.value
+                                }))}
                                 name="business_phone_2"
                                 className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-2/3"
                                 maxLength={11}
@@ -185,8 +256,8 @@ const OnboardingForm = () => {
             )}
 
             <div className="flex justify-center">
-                <Button className="w-2/3 bg-primary" onClick={handleSubmit} disabled={loading}>
-                    {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+                <Button className="w-2/3 bg-primary" onClick={handleSubmit} disabled={onBoardingState.loading}>
+                    {onBoardingState.loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
                     Continue
                 </Button>
             </div>
@@ -195,5 +266,3 @@ const OnboardingForm = () => {
 };
 
 export { OnboardingForm };
-
-// Remember to adapt your CSS accordingly, either by importing a CSS file or using inline styles.

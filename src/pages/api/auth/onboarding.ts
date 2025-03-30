@@ -1,8 +1,9 @@
 import { FROM_NAME, ONBOARDING_COMPLETE_HTML } from "@/constants/notifications/email";
 import { transporter } from "@/utilities/helpers/emailTransporter";
+import { GetTokenByCookieName } from "@/utilities/helpers/redisStorage";
 import { PrismaClient } from "@prisma/client";
 import type { APIRoute } from "astro";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 
 const prisma = new PrismaClient()
@@ -12,8 +13,13 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     request.headers.set("x-pol-rfx-secret", `${x_pol_rfx_secret}`);
     
     const data = await request.json();
-    //@ts-ignore
-    const email = jwt.verify(cookies.get(process.env.COOKIE_NAME)?.value, process.env.JWT_SECRET)?.email;
+    const sessionCookie = await cookies.get(import.meta.env.SESSION_NAME)?.value;
+
+    const tokenData = await GetTokenByCookieName.get(sessionCookie);
+    const token = tokenData[3];
+
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET || process.env.JWT_SECRET_OLD) as JwtPayload;
+    const email = decodedToken.email;
 
     try {
         if (data.companyName) {
@@ -90,7 +96,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
                         html: ONBOARDING_COMPLETE_HTML(payload?.firstName, 'Pillar Fx'),
                     });
                     if (info.messageId) {
-                        return new Response(JSON.stringify({ message: "Onboarding complete!" }), { status: 200 })
+                        return new Response(JSON.stringify({ 
+                            message: "Onboarding complete!"
+                         }), 
+                         { status: 200 }
+                        );
                     } else {
                         return new Response(JSON.stringify({
                             message: "Onboarding failed. Try again."

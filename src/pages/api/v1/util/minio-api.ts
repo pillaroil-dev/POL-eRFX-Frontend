@@ -9,10 +9,12 @@ const minioClient = new Minio.Client({
     secretKey: import.meta.env.MINIO_SECRET_KEY,
 });
 
+const bucketName = import.meta.env.MINIO_BUCKET_NAME;
+
 export const PUT: APIRoute = async ({ request }) => {
-    const { bucketName, objectName } = await request.json();
+    const { objectName } = await request.json();
     try {
-        const presignedUrl = await minioClient.presignedPutObject(bucketName, objectName, 3600); // 1 hour
+        const presignedUrl = await minioClient.presignedPutObject(bucketName, objectName, 3600);
         return new Response(JSON.stringify({
             message: "success",
             data: presignedUrl,
@@ -28,7 +30,7 @@ export const PUT: APIRoute = async ({ request }) => {
 };
 
 export const DELETE: APIRoute = async ({ request }) => {
-    const { bucketName, objectName } = await request.json();
+    const { objectName } = await request.json();
     try {
         await minioClient.removeObject(bucketName, objectName);
         return new Response(JSON.stringify({ 
@@ -45,7 +47,7 @@ export const DELETE: APIRoute = async ({ request }) => {
 };
 
 export const POST: APIRoute = async ({ request }) => {
-    const { bucketName, objectName } = await request.json();
+    const { objectName } = await request.json();
     console.log(bucketName, objectName);
     try {
         const expiration = 15 * 60;

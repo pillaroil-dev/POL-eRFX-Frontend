@@ -3,10 +3,10 @@ import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
 import { removeItemByName, uploadItemPresignedUrl } from '@/utilities/helpers/fileStorage';
 
-export const FileUploader = ({bucketName}: {bucketName: string}) => {
+export const FileUploader = () => {
     const [alert, setAlert] = useState('');
-    const [loading, setLoading] = useState(false)
-    const [localData, setLocalData] = useState([])
+    const [loading, setLoading] = useState(false);
+    const [localData, setLocalData] = useState([]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -20,7 +20,7 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
         const isDone = files.filter((file) => file.meta.status === 'done').length === files.length;
         if (isDone) {
             (async () => {
-                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ bucketName, objectName: file.meta.name })));
+                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ objectName: file.meta.name })));
                 const responses = await Promise.all(uploadUrls.map((uploadUrl, index) => {
                     return fetch(uploadUrl.data, {
                         method: 'PUT',
@@ -60,7 +60,7 @@ export const FileUploader = ({bucketName}: {bucketName: string}) => {
         switch (status) {
             case 'removed':
                 (async () => {
-                    const response  = await removeItemByName({ bucketName, objectName: meta.name });
+                    const response  = await removeItemByName({ objectName: meta.name });
                     if (!response.error) {
                         setLoading(false)
                         setAlert('File deleted!');

@@ -10,7 +10,7 @@ import { FileUploader } from './uploader';
 import { ReloadAfter } from '@/utilities/helpers/reload';
 
 
-export function TenderFormSheet({token, bucketName}: {token: string, bucketName: string}) {
+export function TenderFormSheet({token}: {token: string}) {
 
     const [open, setOpen] = useState(false);
     // const [items, setItems] = useState([{ name: '', quantity: '', unit: '' }]);
@@ -167,7 +167,7 @@ export function TenderFormSheet({token, bucketName}: {token: string, bucketName:
                         <div className='flex justify-between my-2'>
                             <label className="text-xs text-muted-foreground font-semibold" htmlFor="items">Supporting documents</label>
                         </div>
-                        <FileUploader bucketName={bucketName} />
+                        <FileUploader />
                     </div>
 
 

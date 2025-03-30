@@ -11,8 +11,6 @@ const res = await fetch(`${process.env.API_ENDPOINT}/v1/tenders`, {
 const tenders = await res.json();
 
 const role = Astro.locals?.user?.user?.role;
-
-const bucketName = import.meta.env.BUCKET_NAME;
 ---
 
 <AdminLayout title="Tenders">
@@ -23,7 +21,6 @@ const bucketName = import.meta.env.BUCKET_NAME;
       <Text type="p" content="Tenders" className="!font-bold text-xl" />
       <TenderFormSheet
         token={HEADER_TOKEN}
-        bucketName={bucketName}
         client:load
       />
     </div>

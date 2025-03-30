@@ -13,13 +13,12 @@ import { ReloadAfter } from "@/utilities/helpers/reload";
 
 interface BidPlacementPageProps {
     bidData: Bid;
-    bucketName: string,
     bucketPublicDomain: string,
     token: string,
 };
 
 
-export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, token }: BidPlacementPageProps) {
+export function BidPlacementForm({ bidData, bucketPublicDomain, token }: BidPlacementPageProps) {
 
     //@ts-ignore
     const contractorId = bidData?.contractorId;
@@ -108,7 +107,7 @@ export function BidPlacementForm({ bidData, bucketName, bucketPublicDomain, toke
                         </p>
                         <p className="text-xs font-semibold pb-4 text-foreground !text-amber-500">Maximum Number Of Files: 25</p>
                         <p className="text-xs font-semibold pb-4 text-foreground !text-red-600 uppercase">Warning: Bid placed CANNOT be re-called/replaced, any mistake will be treated as an invalid bid, hence, disqualified. Verify Bid before placement.</p>
-                        <UserFileUploader status={bidData?.status} bucketName={bucketName} />
+                        <UserFileUploader status={bidData?.status} />
                         {/* <div className="flex w-full justify-center relative">
                             <div className="flex w-1/3 gap-6">
                                 <Input type={show ? `text` : `password`} name="document-password" placeholder="Document(s) password" className="border-2 border-slate-600 dark:border-slate-100 text-foreground rounded-lg p-6 mt-8 w-full mx-auto" disabled={bidData?.status !== 'open' && true} />

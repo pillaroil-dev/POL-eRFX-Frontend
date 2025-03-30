@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { uploadItemPresignedUrl, removeItemByName } from '@/utilities/helpers/fileStorage';
 
 
-export const UserFileUploader = ({status, bucketName}: {status: string, bucketName: string}) => {
+export const UserFileUploader = ({status}: {status: string}) => {
     const [alert, setAlert] = useState('');
     const [loading, setLoading] = useState(false)
     const [localData, setLocalData] = useState([])
@@ -21,7 +21,7 @@ export const UserFileUploader = ({status, bucketName}: {status: string, bucketNa
         const isDone = files.filter((file) => file.meta.status === 'done').length === files.length;
         if (isDone) {
             (async () => {
-                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ bucketName, objectName: file.meta.name })));
+                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ objectName: file.meta.name })));
                 const responses = await Promise.all(uploadUrls.map((uploadUrl, index) => {
                     return fetch(uploadUrl.data, {
                         method: 'PUT',
@@ -62,7 +62,7 @@ export const UserFileUploader = ({status, bucketName}: {status: string, bucketNa
         switch (status) {
             case 'removed':
                 (async () => {
-                    const response  = await removeItemByName({ bucketName, objectName: meta.name });
+                    const response  = await removeItemByName({ objectName: meta.name });
                     if (!response.error) {
                         setLoading(false)
                         setAlert('File deleted!');

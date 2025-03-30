@@ -73,6 +73,22 @@ export const ADD_VENDOR_HTML_MANUAL_VERIFY = (companyName: string, password: str
             `;
 };
 
+export const ADD_ADMIN_EMAIL_NOTIFICATION = (role: string, fullname: string, password: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX, ${fullname}!</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">You have been added as an ${role}</p>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account password has been generated:</p>
+                <div style="background-color: #f8f8f8; border-radius: 8px; padding: 15px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h4 style="color: #007bff; font-size: 18px; margin: 0; font-weight: 600;">Your Password</h4>
+                    <p style="color: #333; font-size: 20px; margin: 10px 0 0; font-family: monospace; letter-spacing: 1px;">${password}</p>
+                </div>
+                
+                <p style="color: #555; font-size: 14px;">Please ensure to change your password upon first login for security purposes.</p>
+            </div>
+            `;
+};
+
 export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
     return `
             <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
