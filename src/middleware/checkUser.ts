@@ -21,7 +21,7 @@ export const checkUser = defineMiddleware(async ({ request, locals, redirect }, 
     if (loggedIn && role) {
         if (!redirected) {
             redirected = true;
-            return redirect(`/u/${role}`);
+            return redirect(`/u/${role}`); 
         }
     }
 

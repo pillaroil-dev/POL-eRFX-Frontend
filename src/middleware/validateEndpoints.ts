@@ -6,6 +6,7 @@ export const validateEndpoints = defineMiddleware(async ({ request, redirect}, n
     const currentPath = new URL(request.url).pathname.replace(/\/+$/, '');
     const X_POL_RFX_SECRET = request.headers.get('x-pol-rfx-secret');
 
+
     try {
         if (PROTECTED_ROUTE.includes(currentPath)) {
             const { access } = jwt.verify(X_POL_RFX_SECRET, process.env.X_POL_RFX_TOKEN) as JwtPayload;

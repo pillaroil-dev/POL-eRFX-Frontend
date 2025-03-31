@@ -5,11 +5,10 @@ import { prisma } from '@/utilities/helpers/prismaInstace';
 import { AuthRefreshTokenStorage } from '@/utilities/helpers/redisStorage';
 
 export const POST: APIRoute = async ({ request, session }) => {
+    //Set security header
+    request.headers.set("x-pol-rfx-secret", process.env.X_POL_RFX_SECRET);
+    const { email, password } = await request.json();
     try {
-        // Set security header
-        request.headers.set("x-pol-rfx-secret", process.env.X_POL_RFX_SECRET);
-        const { email, password } = await request.json();
-
         if (!email || !password) {
             return new Response(JSON.stringify({
                 message: "Email and password are required"

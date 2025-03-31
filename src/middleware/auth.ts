@@ -5,31 +5,21 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import { jwtDecode } from "jwt-decode";
 
 export const auth = defineMiddleware(async ({ cookies, locals, request, redirect, session }, next) => {
+    
+    const x_pol_rfx_secret = process.env.X_POL_RFX_SECRET;
+    request.headers.set("x-pol-rfx-secret", x_pol_rfx_secret);
     const sessionCookie = await cookies.get(import.meta.env.SESSION_NAME)?.value;
     const jwtSecret = import.meta.env.JWT_SECRET as string;
+    
 
-    // If no session cookie, proceed without setting the user
+    // // If no session cookie, proceed without setting the user
     if (!sessionCookie) {
         locals.isLoggedIn = false;
         return next();
     }
 
-    // const tokenData = await GetTokenByCookieName.get(sessionCookie);
-    // const token = tokenData[3];
     const tokenData = await GetTokenByCookieName.get(sessionCookie);
-        if (!tokenData) {
-            locals.isLoggedIn = false;
-            return redirect('/auth/login', 301);
-        }
-
-        const token = tokenData[3];
-        if (!token) {
-            locals.isLoggedIn = false;
-            return redirect('/forbidden', 301);
-        }
-    
-    const x_pol_rfx_secret = process.env.X_POL_RFX_SECRET;
-    request.headers.set("x-pol-rfx-secret", x_pol_rfx_secret);
+    const token = tokenData[3];
 
     if (!token) {
         console.error("Token is missing from token data.");
@@ -40,12 +30,13 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     const decoded = jwtDecode(token) as JwtPayload;
     const tokenActive = decoded.exp * 1000 > Date.now();
 
+
     // Function to refresh user token
     const refreshUserToken = async () => {
         const refreshToken = await AuthRefreshTokenStorage.getItem(`${decoded.id}`) as string;
-        if (!refreshToken) {
-            return null; // No refresh token available
-        }
+        // if (!refreshToken) {
+        //     return null; // No refresh token available
+        // }
         const decodedRefreshToken = jwtDecode(refreshToken) as JwtPayload;
 
         if (decodedRefreshToken.exp * 1000 > Date.now()) {
@@ -85,7 +76,7 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
             locals.isLoggedIn = false;
             return redirect('auth/login');
         }
-    }
+    };
 
     // Fetch user data based on the email in the decoded token
     try {
@@ -103,7 +94,6 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
                     user: { select: { role: true, verified: true } }
                 }
             }));
-            
         if (user) {
             //@ts-ignore
             locals.user = user as User;
