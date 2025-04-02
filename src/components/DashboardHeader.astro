@@ -8,8 +8,6 @@ const userData = Astro.locals?.user as unknown as userDataType;
 
 //For user, admin, fx view
 const name = userData?.companyName || userData?.fullname || `${userData?.firstName} ${userData?.lastName}`;
-console.log(name, userData)
-
 //For member view
 const companyName = userData?.contractor?.companyName;
 

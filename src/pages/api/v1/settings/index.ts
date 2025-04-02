@@ -6,8 +6,6 @@ import { prisma } from "@/utilities/helpers/prismaInstace";
 //import bcrypt from "bcryptjs";
 // // Generate a salt for hashing passwords
 // const salt = bcrypt.genSaltSync(10);
-
-
 export const GET: APIRoute = async () => {
     
     const user = await prisma.user.findMany({
