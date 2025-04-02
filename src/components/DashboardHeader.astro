@@ -7,7 +7,8 @@ import type { UserData as userDataType } from "@/types/user";
 const userData = Astro.locals?.user as unknown as userDataType;
 
 //For user, admin, fx view
-const name = userData?.companyName || (userData?.firstName + " " + userData?.lastName);
+const name = userData?.companyName || userData?.fullname || `${userData?.firstName} ${userData?.lastName}`;
+console.log(name, userData)
 
 //For member view
 const companyName = userData?.contractor?.companyName;
@@ -17,6 +18,7 @@ const { data } = await res?.json();
 
 const appLogo = data?.settings[0].appLogo;
 const appName = data?.settings[0].appName;
+
 
 ---
 
@@ -41,8 +43,8 @@ const appName = data?.settings[0].appName;
           address={userData?.address}
           alt={`name`}
           src={``}
-          fallbackText={userData?.role !== "member" ? name : companyName}
-          role={userData?.user?.role}
+          fallbackText={userData?.role !== "member" ? (name || userData.fullname) : companyName}
+          role={userData?.user?.role} 
           fullName={userData?.role !== "member" ? '' : userData?.fullname}
 
           client:only="react"

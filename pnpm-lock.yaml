@@ -80,9 +80,6 @@ importers:
       astro-icon:
         specifier: ^1.1.0
         version: 1.1.5
-      bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -177,6 +174,9 @@ importers:
       '@vitest/ui':
         specifier: ^1.6.0
         version: 1.6.1(vitest@1.6.1)
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
       googleapis:
         specifier: ^133.0.0
         version: 133.0.0

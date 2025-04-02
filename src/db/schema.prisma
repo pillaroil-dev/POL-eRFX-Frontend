@@ -111,6 +111,7 @@ model Admin {
   userId   Int    @unique @map("user_id")
   user     User   @relation(fields: [userId], references: [id])
   fullname String  @map("full_name")
+  email    String  @unique
 
   @@map("admin")
 }

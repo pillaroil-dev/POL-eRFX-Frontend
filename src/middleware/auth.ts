@@ -10,7 +10,6 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     request.headers.set("x-pol-rfx-secret", x_pol_rfx_secret);
     const sessionCookie = await cookies.get(import.meta.env.SESSION_NAME)?.value;
     const jwtSecret = import.meta.env.JWT_SECRET as string;
-    
 
     // // If no session cookie, proceed without setting the user
     if (!sessionCookie) {
@@ -87,13 +86,15 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
 
         const user = decoded.role.startsWith('fx-')
             ? await prisma.fxbidder.findFirst(userQueryOptions)
-            : (await prisma.contractor.findFirst(userQueryOptions) ?? await prisma.member.findFirst({
-                ...userQueryOptions,
-                include: {
-                    contractor: true,
-                    user: { select: { role: true, verified: true } }
-                }
-            }));
+            : (await prisma.contractor.findFirst(userQueryOptions) 
+                ?? await prisma.member.findFirst({
+                    ...userQueryOptions,
+                    include: {
+                        contractor: true,
+                        user: { select: { role: true, verified: true } }
+                    }
+                }) 
+                ?? await prisma.admin.findFirst(userQueryOptions));
         if (user) {
             //@ts-ignore
             locals.user = user as User;

@@ -32,7 +32,7 @@ export default function SettingsComponent({
 
   const [payload, setPayload] = useState({
     ...data,
-    newAdminEmail: "", // For new admin email
+    newAdminEmail: "",
     fullname: "",
   });
 
@@ -185,7 +185,7 @@ export default function SettingsComponent({
               <span className="text-xs font-regular text-foreground my-2">
                 Add new admin
               </span>
-              <div className="flex w-full justify-between">
+              <div className="flex w-full flex-col gap-2 justify-between">
                 <div className="w-full flex-col md:w-2/3 rounded-md border border-solid">
                   <Input
                     name="fullname"
@@ -193,7 +193,9 @@ export default function SettingsComponent({
                     value={payload.fullname}
                     onChange={handlePayloadChange}
                   />
-                  <Input
+                </div>
+                <div className="w-full flex-col md:w-2/3 rounded-md border border-solid">
+                <Input
                     name="newAdminEmail"
                     placeholder="Email address"
                     value={payload.newAdminEmail}

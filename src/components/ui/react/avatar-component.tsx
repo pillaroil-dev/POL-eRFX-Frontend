@@ -16,6 +16,7 @@ interface AVATAR_PROPS {
 }
 
 export const AvatarComponent = ({ src, alt, fallbackText, userID, email, phone, address, role, fullName }: AVATAR_PROPS) => {
+
     return (
         
         <HoverCard openDelay={200}>
