@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Input } from "./input";
 import Select from "react-dropdown-select";
 import { Button } from "./button";
@@ -19,6 +19,8 @@ export default function SettingsComponent({
   usersData: {
     adminUsers: UserData[];
     operatorUsers: UserData[];
+    fxadminUsers: UserData[];
+    fxoperatorUsers: UserData[];
     users: UserData[];
   };
   settings: any[];
@@ -27,6 +29,8 @@ export default function SettingsComponent({
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingButtonId, setLoadingButtonId] = useState(null);
+  const buttonRef = useRef(null);
 
   const data = settings[0];
 
@@ -86,6 +90,29 @@ export default function SettingsComponent({
       toast.error("An error occurred while saving settings");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteAdmin = async (id: number) => {
+    try {
+      setLoadingButtonId(id);
+      const res = await fetch("/api/v1/settings", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-pol-rfx-secret": token,
+        },
+        body: JSON.stringify({ id: id }),
+      });
+
+      const { message } = await res.json();
+      toast.success(message);
+      ReloadAfter(1500);
+
+    } catch (error) {
+      toast.error("An error occurred while deleting admin");
+    } finally {
+      setLoadingButtonId(null);
     }
   };
 
@@ -156,28 +183,171 @@ export default function SettingsComponent({
               <h1 className="text-[16px] font-bold mb-4 text-foreground">
                 System Administrators
               </h1>
-              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">
+              <label className="block text-sm pb-2 font-bold text-gray-600 dark:text-gray-400">
                 Admin
               </label>
-              {usersData?.adminUsers?.map((item: UserData) => (
-                <Input
-                  key={item?.id}
-                  className="text-foreground font-medium text-lg w-full border-0 ring-transparent shadow-none focus-visible:outline-none"
-                  defaultValue={item?.email}
-                  readOnly
-                />
-              ))}
-              <label className="block text-sm font-medium pt-4 text-gray-600 dark:text-gray-400">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-background">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Admin Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-background dark:divide-gray-400">
+                  {usersData?.adminUsers?.map((item: UserData) => (
+                    <tr key={item?.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">
+                        {item?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button
+                          id={String(item.id)}
+                          ref={buttonRef}
+                          onClick={() => handleDeleteAdmin(item?.id)}
+                          disabled={item.id === loadingButtonId && true}
+                          className={`px-2 text-xs py-1 text-white ${item.id === loadingButtonId ? 'bg-gray-400 rounded' : 'bg-red-600 rounded hover:bg-red-700'} focus:outline-none focus:shadow-outline`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <label className="block text-sm pb-2 font-bold pt-4 text-gray-600 dark:text-gray-400">
                 Operators (Bid Officer)
               </label>
-              {usersData?.operatorUsers?.map((item: UserData) => (
-                <Input
-                  key={item?.id}
-                  className="text-foreground font-medium text-lg w-full border-0 ring-transparent shadow-none focus-visible:outline-none"
-                  defaultValue={item?.email}
-                  readOnly
-                />
-              ))}
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-background">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Operator Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-background dark:divide-gray-400">
+                  {usersData?.operatorUsers?.map((item: UserData) => (
+                    <tr key={item?.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">
+                        {item?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button
+                        id={String(item.id)}
+                        ref={buttonRef}
+                        disabled={item.id === loadingButtonId && true}
+                          onClick={() => handleDeleteAdmin(item?.id)}
+                           className={`px-2 text-xs py-1 text-white ${item.id === loadingButtonId ? 'bg-gray-400 rounded' : 'bg-red-600 rounded hover:bg-red-700'} focus:outline-none focus:shadow-outline`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+               <label className="block text-sm pb-2 font-bold text-gray-600 dark:text-gray-400">
+                FX Admin
+              </label>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-background">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      FX Admin Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-background dark:divide-gray-400">
+                  {usersData?.fxadminUsers?.map((item: UserData) => (
+                    <tr key={item?.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">
+                        {item?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button
+                        id={String(item.id)}
+                        ref={buttonRef}
+                        disabled={item.id === loadingButtonId && true}
+                          onClick={() => handleDeleteAdmin(item?.id)}
+                          className={`px-2 text-xs py-1 text-white ${item.id === loadingButtonId ? 'bg-gray-400 rounded' : 'bg-red-600 rounded hover:bg-red-700'} focus:outline-none focus:shadow-outline`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <label className="block text-sm pb-2 font-bold pt-4 text-gray-600 dark:text-gray-400">
+                FX Operators (FX Bid Officer)
+              </label>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-background">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      FX Operator Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-background dark:divide-gray-400">
+                  {usersData?.fxoperatorUsers?.map((item: UserData) => (
+                    <tr key={item?.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">
+                        {item?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button
+                        id={String(item.id)}
+                        ref={buttonRef}
+                        disabled={item.id === loadingButtonId && true}
+                          onClick={() => handleDeleteAdmin(item?.id)}
+                          className={`px-2 text-xs py-1 text-white ${item.id === loadingButtonId ? 'bg-gray-400 rounded' : 'bg-red-600 rounded hover:bg-red-700'} focus:outline-none focus:shadow-outline`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
               <p className="mt-4 font-medium text-foreground">
                 New Administrator?
@@ -226,6 +396,27 @@ export default function SettingsComponent({
                         onChange={(e) => handleRoleChange(e.target.value)}
                       />
                       <label htmlFor="operator">Operator</label>
+                    </div>
+
+                    <div className="flex items-center space-x-1">
+                      <input
+                        type="radio"
+                        value="fx-admin"
+                        id="fx-admin"
+                        checked={selectedRole === "fx-admin"}
+                        onChange={(e) => handleRoleChange(e.target.value)}
+                      />
+                      <label htmlFor="fx-admin">FX Admin</label>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <input
+                        type="radio"
+                        value="fx-operator"
+                        id="fx-operator"
+                        checked={selectedRole === "fx-operator"}
+                        onChange={(e) => handleRoleChange(e.target.value)}
+                      />
+                      <label htmlFor="fx-operator">FX Operator</label>
                     </div>
                   </div>
                 </div>

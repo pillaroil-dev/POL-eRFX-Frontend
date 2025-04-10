@@ -19,7 +19,16 @@ const operatorUsers = data?.user?.filter(
   ({ role }: { role: string }) => role === "operator"
 );
 
-const userData = { adminUsers, operatorUsers, users };
+const fxadminUsers = data?.user?.filter(
+  ({ role }: { role: string }) => role === "fx-admin"
+);
+
+const fxoperatorUsers = data?.user?.filter(
+  ({ role }: { role: string }) => role === "fx-operator"
+);
+
+
+const userData = { adminUsers, operatorUsers, fxadminUsers, fxoperatorUsers, users };
 ---
 
 <AdminLayout title="Settings">

@@ -1,10 +1,8 @@
 import nodemailer from 'nodemailer';
+import { Headers } from '@/constants';
 
 const res = await fetch(`${import.meta.env.API_ENDPOINT}/v1/settings`, {
-    headers: {
-        "x-pol-rfx-secret": process.env.X_POL_RFX_SECRET,
-        "Content-Type": "application/json",
-    }
+    headers: Headers,
 });
 
 // Check if the response is ok
