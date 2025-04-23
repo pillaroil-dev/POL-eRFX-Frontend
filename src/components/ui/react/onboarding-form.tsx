@@ -191,7 +191,7 @@ const OnboardingForm = () => {
                                 minLength={11}
                                 className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 w-2/3"
                             />
-                            <div className="flex items-center space-x-2 border border-primary p-3 rounded-lg">
+                            {/* <div className="flex items-center space-x-2 border border-primary p-3 rounded-lg">
                                 <label
                                     htmlFor="terms"
                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground"
@@ -202,7 +202,7 @@ const OnboardingForm = () => {
                                     ...prevState,
                                     checked: !onBoardingState.checked,
                                 }))} name="falcon_registration" />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
