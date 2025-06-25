@@ -4,9 +4,27 @@ import { Headers } from "@/constants";
 const getStatsData = async () => {
     const endpoints = ["/v1/tenders", "/v1/vendors", "/v1/fx", "/v1/bids/bid-placement", "/v1/fx/fetch-fx-bid-placement"];
     const requests = endpoints.map(endpoint => fetch(`${process.env.API_ENDPOINT}${endpoint}`, { headers: Headers }));
-    const [resTender, resVendor, fxBids, bidPlacementData, fxBidPlacementData] = await Promise.all(requests);
+    const [
+        resTender, 
+        resVendor, 
+        fxBids, 
+        bidPlacementData, 
+        fxBidPlacementData
+    ] = await Promise.all(requests);
 
-    const [tenders, vendors, fxbids, bidPlacement, fxBidPlacement] = await Promise.all([resTender.json(), resVendor.json(), fxBids.json(), bidPlacementData.json(), fxBidPlacementData.json()]);
+    const [
+        tenders, 
+        vendors, 
+        fxbids, 
+        bidPlacement, 
+        fxBidPlacement
+    ] = await Promise.all([
+        resTender.json(), 
+        resVendor.json(), 
+        fxBids.json(), 
+        bidPlacementData.json(), 
+        fxBidPlacementData.json()
+    ]);
 
     const tenderExpiringSoon = async () => {
         const currentDate = new Date();

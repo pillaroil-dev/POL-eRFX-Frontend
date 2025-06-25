@@ -78,7 +78,7 @@ export const FileUploader = () => {
 
     useEffect(() => {
         window.localStorage.setItem("@files", JSON.stringify(localData));
-    }, [localData?.length]);
+    }, [localData.length]);
 
     return (
         <>

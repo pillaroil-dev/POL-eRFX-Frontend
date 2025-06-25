@@ -23,6 +23,9 @@ export const decodePassword = (password: string, hashedPassword?: string) => {
 };
 
 export const encodePassword = (password: string) => {
+    if(!password){
+        throw new Error("Password can't be undefined");
+    }
     // Define salt rounds for hashing
     const saltRounds = 10;
     // Generate a salt and hash on separate function calls

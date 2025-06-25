@@ -10,22 +10,11 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 //cloudflare R2
 const CFR2 = new S3Client({
-    region: "auto",
-    endpoint: `https://3514d9a42a1f6aa7ded1e24715a759da.r2.cloudflarestorage.com`,
-    credentials: {
-        accessKeyId: `0d6eaf2f133a2ee4fa9a967f7ae714e5`,
-        secretAccessKey: `55047e846d41e4e45b93c14d3686da279b08a73b74ee602cdf409e7e10d2b192`,
-    },
+
 });
 //Minio
 const minioClient = new S3Client({
-    endpoint: 'http://storage.polrfx.ng:9000',
-    region: 'auto',
-    credentials: {
-        accessKeyId: `t60vdz8Ipq62sdnaQ9KK`,
-        secretAccessKey: `5AuqmMWzMqJUjoIW4cj0wfgeqKJ54Tr1R6mkc7E1`,
-    },
-    forcePathStyle: true,
+
 });
 
 const listMinioBuckets = async () => {

@@ -48,7 +48,6 @@ export const DELETE: APIRoute = async ({ request }) => {
 
 export const POST: APIRoute = async ({ request }) => {
     const { objectName } = await request.json();
-    console.log(bucketName, objectName);
     try {
         const expiration = 15 * 60;
         const presignedUrl = await minioClient.presignedGetObject(bucketName, objectName, expiration);

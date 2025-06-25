@@ -52,7 +52,7 @@ export const ADD_VENDOR_HTML = (companyName: string, token: string) => {
                 <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX, ${companyName}!</h1>
                 <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account has been successfully created.</p>
                 <p style="color: #555; font-size: 16px; margin: 20px 0;">Please use the link below to set your password and start exploring our services:</p>
-                <a href="${process.env.HOST}/auth/set-password?token=${token}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">Set Your Password</a>
+                <a href="${process.env.APP_URL}/auth/set-password?token=${token}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">Set Your Password</a>
                 <p style="color: #555; font-size: 14px;">This link will expire in 24 hours.</p>
             </div>
             `;
@@ -95,7 +95,7 @@ export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
             <h1 style="color: #333; font-size: 24px;">Hi ${companyName}!</h1>
                 <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new tender with ID PTID${tenderId}. Ensure to review and send in an appropriate bid before the close date.</p>
                  <p style="color: #555; font-size: 16px; margin: 20px 0;">Follow the link to see your tender</p>
-                <a href="${process.env.HOST}/u/user/tenders/manage/${tenderId}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">View tender</a>
+                <a href="${process.env.APP_URL}/u/user/tenders/manage/${tenderId}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">View tender</a>
             </div>
             `;
 };
