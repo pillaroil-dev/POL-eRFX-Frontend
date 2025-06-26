@@ -4,7 +4,7 @@ import * as Minio from 'minio'
 const minioClient = new Minio.Client({
     endPoint: 's3connect.polrfx.ng',
     port: 9000,
-    useSSL: import.meta.env.MINIO_USESSL || true,
+    useSSL: false,
     accessKey: import.meta.env.MINIO_ACCESS_KEY,
     secretKey: import.meta.env.MINIO_SECRET_KEY,
 });
