@@ -2,9 +2,9 @@ import type { APIRoute } from "astro";
 import * as Minio from 'minio'
 
 const minioClient = new Minio.Client({
-    endPoint: import.meta.env.SERVER_IP,
+    endPoint: 's3connect.polrfx.ng',
     port: 9000,
-    useSSL: false,
+    useSSL: true,
     accessKey: import.meta.env.MINIO_ACCESS_KEY,
     secretKey: import.meta.env.MINIO_SECRET_KEY,
 });
