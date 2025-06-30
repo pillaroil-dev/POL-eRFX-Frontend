@@ -1,7 +1,5 @@
 import type { APIRoute } from "astro";
 import * as Minio from 'minio';
-import * as fs from 'fs'
-import * as https from 'https'
 
 const minioClient = new Minio.Client({
     endPoint: 's3connect.polrfx.ng',
@@ -9,13 +7,6 @@ const minioClient = new Minio.Client({
     useSSL: false,
     accessKey: import.meta.env.MINIO_ACCESS_KEY,
     secretKey: import.meta.env.MINIO_SECRET_KEY,
-    // transportAgent: new https.Agent({
-    //     timeout: 10000,
-    //     ca: fs.readFileSync(import.meta.env.CA_CERT_PATH || '/app/certs/ca.cert'),
-    //     cert: fs.readFileSync(import.meta.env.PUBLIC_CERT_PATH || '/app/certs/public.cert'),
-    //     key: fs.readFileSync(import.meta.env.SECRET_KEY_PATH || '/app/certs/secret.key'),
-    //     keepAlive: false,
-    //   }),
 });
 
 const bucketName = import.meta.env.MINIO_BUCKET_NAME;
