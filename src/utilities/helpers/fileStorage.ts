@@ -3,7 +3,7 @@ export const uploadItemPresignedUrl = async ({objectName }: {objectName: string 
         method: 'PUT',
         body: JSON.stringify({ type: 'upload',objectName }),
     });
-    return response.json();
+    return response.json()
 };
 
 export const removeItemByName = async ({objectName }: {objectName: string }) => {
@@ -11,5 +11,5 @@ export const removeItemByName = async ({objectName }: {objectName: string }) => 
         method: 'DELETE',
         body: JSON.stringify({ type: 'delete',objectName }),
     });
-    return response.json();
+    return response.json()
 };
