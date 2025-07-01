@@ -1,15 +1,15 @@
+import axios from "axios";
+
 export const uploadItemPresignedUrl = async ({objectName }: {objectName: string }) => {
-    const response = await fetch('/api/v1/util/minio-api', {
-        method: 'PUT',
-        body: JSON.stringify({ type: 'upload',objectName }),
-    });
-    return response.json()
+    const response = await axios.put('/api/v1/util/minio-api', { type: 'upload', objectName });
+    const { data } = response.data;
+    return data;
 };
 
 export const removeItemByName = async ({objectName }: {objectName: string }) => {
-    const response = await fetch('/api/v1/util/minio-api', {
-        method: 'DELETE',
-        body: JSON.stringify({ type: 'delete',objectName }),
+    const response = await axios.delete('/api/v1/util/minio-api', {
+        data: { type: 'delete', objectName }
     });
-    return response.json()
+    const data = response.data;
+    return data;
 };

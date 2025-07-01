@@ -27,25 +27,31 @@ export const FileUploader = () => {
         const isDone = files.filter((file) => file.meta.status === 'done').length === files.length;
         if (isDone) {
             (async () => {
-                const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ objectName: file.meta.name })));
-                const responses = await Promise.all(uploadUrls.map((uploadUrl, index) => {
-                    return fetch(uploadUrl.data, {
-                        method: 'PUT',
-                        body: files[index]?.file,
-                        headers: {
-                            'Content-Type': files[index]?.meta?.type?.includes('pdf') ? 'application/pdf' : files[index]?.meta?.type?.includes('doc') || files[index]?.meta?.type?.includes('docx') ? 'application/msword' : 'image/*',
-                        },
+                try {
+                    const uploadUrls = await Promise.all(files.map(file => uploadItemPresignedUrl({ objectName: file.meta.name })));
+                    const responses = await Promise.all(uploadUrls.map((uploadUrl, index) => {
+                        return fetch(uploadUrl, {
+                            method: 'PUT',
+                            body: files[index]?.file,
+                            headers: {
+                                'Content-Type': files[index]?.meta?.type?.includes('pdf') ? 'application/pdf' : files[index]?.meta?.type?.includes('doc') || files[index]?.meta?.type?.includes('docx') ? 'application/msword' : 'image/*',
+                            },
+                        });
+                    }));
+                    responses.forEach(response => {
+                        if (response.ok) {
+                            setAlert(alertMsg.success);
+                        } else {
+                            setAlert(alertMsg.failed);
+                            console.error(alertMsg.failed, response);
+                        }
                     });
-                }));
-                responses.forEach(response => {
-                    if (response.ok) {
-                        setAlert(alertMsg.success);
-                    } else {
-                        setAlert(alertMsg.failed);
-                        console.error(alertMsg.failed, response);
-                    }
-                });
-                setLoading(false);
+                } catch (error) {
+                    setAlert(alertMsg.failed);
+                    console.error("Upload failed:", error);
+                } finally {
+                    setLoading(false);
+                }
             })();
 
             files.forEach((file) => {
