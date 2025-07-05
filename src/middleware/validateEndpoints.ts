@@ -10,7 +10,6 @@ export const validateEndpoints = defineMiddleware(async ({ request, redirect}, n
     try {
         if (PROTECTED_ROUTE.includes(currentPath)) {
             const { access } = jwt.verify(X_POL_RFX_SECRET, process.env.X_POL_RFX_TOKEN) as JwtPayload;
-
             if (!access) {
                 return redirect('/forbidden');
             }

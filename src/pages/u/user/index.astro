@@ -1,6 +1,45 @@
 ---
 import UserLayout from "@/layouts/UserLayout.astro";
 import UserStats from "@/components/UserStats.astro";
+import {type UserData} from "@/types/user";
+
+const userData = Astro.locals?.user as unknown as UserData;
+
+if (!userData) {
+  Astro.session.destroy();
+  Astro.cookies.delete(process.env.SESSION_NAME, { path: "/" });
+  return Astro.redirect("/auth/login", 302);
+}
+
+// Helper function for fetching bids
+async function fetchUserBids(id: string | number) {
+  try {
+    const params = new URLSearchParams({ id: String(id) });
+    const res = await fetch(
+      `${process.env.API_ENDPOINT}/v1/bids?${params.toString()}`,
+      {
+        headers: {
+          "x-pol-rfx-secret": process.env.X_POL_RFX_SECRET ?? "",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!res.ok) throw new Error("Failed to fetch bids");
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching bids:", error);
+    return null;
+  }
+}
+
+const id = userData?.contractor?.id ?? userData?.id;
+const bids = await fetchUserBids(id);
+
+if (!bids) {
+  return Astro.redirect("/auth/login", 302);
+}
+
+Astro.locals.bids = bids;
 ---
 
 <UserLayout title="Dashboard | User">

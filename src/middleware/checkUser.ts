@@ -6,14 +6,14 @@ let redirected = false;
 export const checkUser = defineMiddleware(async ({ request, locals, redirect }, next) => {
     const currentPath = new URL(request.url).pathname;
     //@ts-ignore
-    const loggedIn = await locals.isLoggedIn;
+    const loggedIn = locals.isLoggedIn;
     //@ts-ignore
-    const role = await locals?.user?.user?.role;
+    const role = locals?.user?.user?.role;
 
     if (PUBLIC_ROUTE.includes(currentPath)) {
         if ( !role && !redirected) {
             redirected = true;
-            return redirect(`/auth/login`);
+            return next();
         }
         return next();
     }

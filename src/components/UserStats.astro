@@ -2,51 +2,18 @@
 import { Icon } from "astro-icon/components";
 import { Badge } from "./ui/react/badge";
 import { formatDate } from "@/utilities/helpers/time-formatter";
+import { getUserStatsData } from '@/utilities/helpers/getStatsData';
 import Text from "./Text.astro";
 
-
 const result = Astro.locals.bids;
-const userBids = result?.data;
-
-const activeBid = userBids?.filter((bid) => bid.status === "open")?.length;
-const totalBids = userBids?.length;
-
-//check for accepted bids
-const acceptedBidPlacements = userBids?.reduce((accumulator, bid) => {
-  const acceptedPlacements =
-    bid.tender?.BidPlacement?.filter(
-      (placement) => placement.status === "accepted"
-    )?.length || 0;
-  return accumulator + acceptedPlacements;
-}, 0);
-
-//check for rejcted bids
-const rejectedBidPlacements = userBids?.reduce((accumulator, bid) => {
-  const acceptedPlacements =
-    bid.tender?.BidPlacement?.filter(
-      (placement) => placement.status === "rejected"
-    )?.length || 0;
-  return accumulator + acceptedPlacements;
-}, 0);
-
-//get total documents uploaded by user
-const documents = userBids?.reduce((accumulator, item) => {
-  if (item.tender) {
-    const filesCount =
-      item?.tender?.BidPlacement?.reduce(
-        (count, placement) => count + placement?.files?.length,
-        0
-      ) || 0;
-    accumulator.push(filesCount);
-  }
-  return accumulator;
-}, []);
-
-const totalDocuments = documents.reduce((total, count) => total + count, 0);
-
-const tenders = userBids
-  ?.map(({ tender }) => tender)
-  ?.sort((a, b) => (a?.createdAt > b?.createdAt ? 1 : -1));
+const { 
+  activeBid, 
+  totalBids, 
+  tenders, 
+  totalDocuments, 
+  rejectedBidPlacements, 
+  acceptedBidPlacements } 
+  = await getUserStatsData(result);
 
 ---
 

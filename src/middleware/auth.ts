@@ -14,7 +14,8 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     // // If no session cookie, proceed without setting the user
     if (!sessionCookie) {
         locals.isLoggedIn = false;
-        return next();
+        //return redirect('/auth/login');
+        return next()
     }
 
     const tokenData = await GetTokenByCookieName.get(sessionCookie);
@@ -28,8 +29,6 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
 
     const decoded = jwtDecode(token) as JwtPayload;
     const tokenActive = decoded.exp * 1000 > Date.now();
-
-    console.log({tokenActive})
 
 
     // Function to refresh user token

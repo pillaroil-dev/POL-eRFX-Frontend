@@ -1,4 +1,5 @@
 const PUBLIC_ROUTE = [
+    "/",
     "/auth/login",
     "/auth/signup",
     "/auth/onboarding",
@@ -12,6 +13,7 @@ const PUBLIC_ROUTE = [
 ];
 
 const PROTECTED_ROUTE = [
+    "/u/",
     //bids
     "/api/v1/bids",
     "/api/v1/bids/manage-bid",

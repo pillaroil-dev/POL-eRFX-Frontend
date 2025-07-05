@@ -4,7 +4,6 @@ import { menu } from "../utilities/helpers/menu";
 import { Toaster } from "../components/ui/react/sonner";
 import DashboardHeader from "../components/DashboardHeader.astro";
 import Sidebar from "../components/Sidebar.astro";
-import {type UserData} from "@/types/user";
 import InactivityCheck from "@/components/InactivityCheck.astro";
 import ThemeScript from "@/components/ThemeScript.astro";
 
@@ -13,27 +12,9 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const userData = Astro.locals?.user as unknown as UserData;
-
-const id = userData?.contractor?.id ?? userData?.id;
-
-const params = new URLSearchParams();
-params.append("id", String(id));
-
-const res = await fetch(
-  `${process.env.API_ENDPOINT}/v1/bids?${params.toString()}`,
-  {
-    headers: {
-      "x-pol-rfx-secret": process.env.X_POL_RFX_SECRET,
-      "Content-Type": "application/json",
-    },
-  }
-);
-
-const result = await res.json();
-Astro.locals.bids = result;
 
 ---
+
 
 <!doctype html>
 <html lang="en">
