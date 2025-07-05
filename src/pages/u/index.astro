@@ -17,7 +17,7 @@ const otpVerified = Boolean(Astro.cookies.get("otp-verified")?.value);
 if (role) {
   //add a flag to detect otp confirmation
   if (!otpVerified) {
-    //redirect to otp page if role is either operator or fx
+    //redirect to otp page if role is either operator or nfx
     const otp = Math.floor(1000 + Math.random() * 9000); // Generate 4 digit OTP
     if (isLoggedIn) {
       if (!role) {

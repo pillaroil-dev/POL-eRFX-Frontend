@@ -8,7 +8,7 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     
     const x_pol_rfx_secret = process.env.X_POL_RFX_SECRET;
     request.headers.set("x-pol-rfx-secret", x_pol_rfx_secret);
-    const sessionCookie = await cookies.get(import.meta.env.SESSION_NAME)?.value;
+    const sessionCookie = cookies.get(import.meta.env.SESSION_NAME)?.value;
     const jwtSecret = import.meta.env.JWT_SECRET as string;
 
     // // If no session cookie, proceed without setting the user
@@ -29,13 +29,18 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     const decoded = jwtDecode(token) as JwtPayload;
     const tokenActive = decoded.exp * 1000 > Date.now();
 
+    console.log({tokenActive})
+
 
     // Function to refresh user token
     const refreshUserToken = async () => {
         const refreshToken = await AuthRefreshTokenStorage.getItem(`${decoded.id}`) as string;
-        // if (!refreshToken) {
-        //     return null; // No refresh token available
-        // }
+        if (!refreshToken) {
+            session.destroy();
+            cookies.delete(process.env.SESSION_NAME, { path: "/" });
+            locals.isLoggedIn = false;
+            return redirect('/auth/login');
+        }
         const decodedRefreshToken = jwtDecode(refreshToken) as JwtPayload;
 
         if (decodedRefreshToken.exp * 1000 > Date.now()) {
@@ -73,7 +78,7 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
         if (!newToken) {
             session.destroy();
             locals.isLoggedIn = false;
-            return redirect('auth/login');
+            return redirect('/auth/login');
         }
     };
 
