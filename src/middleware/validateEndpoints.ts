@@ -2,7 +2,7 @@ import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { defineMiddleware } from "astro:middleware";
 import { PROTECTED_ROUTE } from "../constants/index";
 
-export const validateEndpoints = defineMiddleware(async ({ request, redirect}, next) => {
+export const validateEndpoints = defineMiddleware(async ({ request, redirect, locals}, next) => {
     const currentPath = new URL(request.url).pathname.replace(/\/+$/, '');
     const X_POL_RFX_SECRET = request.headers.get('x-pol-rfx-secret');
 

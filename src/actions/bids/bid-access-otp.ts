@@ -13,7 +13,6 @@ export const bidAccessAction = {
             operatorEmail: z.string().email(),
         }),
         handler: async ({operatorEmail, bidId}) => {
-            
             try {
                 const generatedOtp = await generateOTP(6);
                 await OTPStorage.setItem(operatorEmail, generatedOtp, {

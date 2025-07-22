@@ -11,10 +11,10 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
     const sessionCookie = cookies.get(import.meta.env.SESSION_NAME)?.value;
     const jwtSecret = import.meta.env.JWT_SECRET as string;
 
+    //TODO: Fix auth issue where tenders open without user authenticated. Using undefined instead.
     // // If no session cookie, proceed without setting the user
     if (!sessionCookie) {
-        locals.isLoggedIn = false;
-        //return redirect('/auth/login');
+        //return redirect('/auth/login'); //FIXME: issue to be resolved.
         return next()
     }
 
@@ -110,5 +110,5 @@ export const auth = defineMiddleware(async ({ cookies, locals, request, redirect
         return redirect('/forbidden', 301);
     }
 
-    return next();
+    return next(); 
 });

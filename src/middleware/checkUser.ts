@@ -24,6 +24,5 @@ export const checkUser = defineMiddleware(async ({ request, locals, redirect }, 
             return redirect(`/u/${role}`); 
         }
     }
-
     return next();
 })
