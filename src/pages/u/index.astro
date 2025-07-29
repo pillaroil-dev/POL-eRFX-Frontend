@@ -9,13 +9,7 @@ import { transporter } from "@/utilities/helpers/emailTransporter";
 // Extract user info
 const role = Astro.locals?.user?.user?.role;
 const signInUser = Astro.locals?.user?.companyName;
-const isLoggedIn = Astro.locals?.isLoggedIn;
 const otpVerified = Boolean(Astro.cookies.get("otp-verified")?.value);
-
-// Early exit if not logged in or no role
-if (!isLoggedIn || !role) {
-  return Astro.redirect("/auth/login", 302);
-}
 
 // Define roles that require OTP
 const OTP_ROLES = ["operator", "fx-operator"];
