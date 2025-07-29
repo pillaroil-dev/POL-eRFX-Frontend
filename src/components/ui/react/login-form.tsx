@@ -32,7 +32,7 @@ export default function LoginForm({token}: {token: string}) {
                 setLoading(false)
                 toast.success(responseMessage.message);
                 setTimeout(() => {
-                    window.location.replace('/u')
+                    window.location.replace('/u');
                 }, 1000);
             } else {
                 setLoading(false)

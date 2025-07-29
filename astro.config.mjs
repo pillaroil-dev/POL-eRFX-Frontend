@@ -37,7 +37,7 @@ export default defineConfig({
     },
     cookie: {
       name: SESSION_NAME,
-      sameSite: true,
+      sameSite: 'lax',
       //cookie does not expire
     },
     ttl: parseInt(JWT_EXPIRES_IN) //session expiration itself

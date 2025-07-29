@@ -25,13 +25,6 @@ export const checkUser = defineMiddleware(async ({ request, locals, session, red
     // Check if the route is a protected user route (e.g., /u/...)
     const isUserRoute = currentPath.startsWith('/u');
 
-
-    console.log(`[checkUser] Path: ${currentPath}`);
-    console.log(`[checkUser] locals.isLoggedIn: ${locals?.isLoggedIn}`);
-    console.log(`[checkUser] locals.user: ${JSON.stringify(locals?.user)}`);
-    console.log(`[checkUser] userId from locals: ${userId}`);
-    console.log(`[checkUser] activeSession exists: ${!!activeSession}`);
-
     // If accessing a public route and already logged in, redirect away from login/signup to dashboard
     if (isPublicRoute && loggedIn && role) {
         if (currentPath === "/auth/login" || currentPath === "/auth/signup") {

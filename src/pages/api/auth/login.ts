@@ -5,7 +5,7 @@ import { prisma } from '@/utilities/helpers/prismaInstace';
 import { AuthRefreshTokenStorage } from '@/utilities/helpers/redisStorage';
 
 export const POST: APIRoute = async ({ request, session }) => {
-    //Set security header
+    const hasRedirectUrl = await session.get('redirectAfterLogin');
     request.headers.set("x-pol-rfx-secret", process.env.X_POL_RFX_SECRET);
     const { email, password } = await request.json();
     try {
