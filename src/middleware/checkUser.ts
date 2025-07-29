@@ -25,11 +25,6 @@ export const checkUser = defineMiddleware(async ({ request, locals, session, red
     // Check if the route is a protected user route (e.g., /u/...)
     const isUserRoute = currentPath.startsWith('/u');
 
-    // If accessing a protected user route without an active session, redirect to login
-    if (isUserRoute && !activeSession) {
-        return redirect("/auth/login");
-    }
-
     // If accessing a public route and already logged in, redirect away from login/signup to dashboard
     if (isPublicRoute && loggedIn && role) {
         if (currentPath === "/auth/login" || currentPath === "/auth/signup") {
@@ -37,6 +32,11 @@ export const checkUser = defineMiddleware(async ({ request, locals, session, red
         }
         // Allow access to other public routes if logged in
         return next();
+    }
+
+    // If accessing a protected user route without an active session, redirect to login
+    if (isUserRoute && !activeSession) {
+        return redirect("/auth/login");
     }
 
     // Default: allow the request to proceed
