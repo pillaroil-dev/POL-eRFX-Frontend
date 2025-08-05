@@ -1,3 +1,14 @@
+/*
+// This action is used to send a verification OTP to the operator email for bid access
+// The OTP is stored in Redis and is valid for 15 minutes
+// The OTP is sent to the operator email and the operator can use the OTP to access the bid
+// The OTP is verified when the operator clicks on the link in the email
+// The OTP is verified when the operator clicks on the link in the email
+// Please note this astro version is specifically used to enable me use both
+// astro endpoints and astro actions. Read more about compatibility and issues
+// https://docs.astro.build/en/guides/actions/compatibility/
+*/
+
 import { BIDS_ACCESS_VERIFICATION_OTP_EMAIL, EXTEND_END_DATE_OTP_HTML } from "@/constants/notifications/email";
 import { transporter } from "@/utilities/helpers/emailTransporter";
 import { generateOTP } from "@/utilities/helpers/generateOTP";
@@ -20,7 +31,7 @@ export const bidAccessAction = {
                 });
                 await transporter.sendMail({
                     from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
-                    to: process.env.OPERATOR_APPROVAL_ADMINS,  //use admin emails instead. Babajide, IT heads and admin only //
+                    to: process.env.OPERATOR_APPROVAL_ADMINS, 
                     subject: "Bids Access Verification",
                     html: BIDS_ACCESS_VERIFICATION_OTP_EMAIL(parseInt(generatedOtp), bidId),
                 });
