@@ -8,7 +8,7 @@ import { transporter } from "@/utilities/helpers/emailTransporter";
 
 // Extract user info
 const role = Astro.locals?.user?.user?.role;
-const signInUser = Astro.locals?.user?.companyName;
+const signInUser = Astro.locals?.user?.companyName ?? Astro.locals?.user?.fullname;
 const otpVerified = Boolean(Astro.cookies.get("otp-verified")?.value);
 
 // Define roles that require OTP

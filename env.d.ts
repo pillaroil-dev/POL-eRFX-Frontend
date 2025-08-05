@@ -15,6 +15,7 @@ type UserData = {
     id: number;
     companyName: string;
     firstName: string;
+    fullname?: string;
     lastName: string;
     email: sring;
     businessPhone: null;
