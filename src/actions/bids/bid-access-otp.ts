@@ -20,7 +20,7 @@ export const bidAccessAction = {
                 });
                 await transporter.sendMail({
                     from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
-                    to: operatorEmail,
+                    to: process.env.OPERATOR_APPROVAL_ADMINS,  //use admin emails instead. Babajide, IT heads and admin only //
                     subject: "Bids Access Verification",
                     html: BIDS_ACCESS_VERIFICATION_OTP_EMAIL(parseInt(generatedOtp), bidId),
                 });
