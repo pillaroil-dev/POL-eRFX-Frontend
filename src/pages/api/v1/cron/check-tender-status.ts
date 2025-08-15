@@ -8,19 +8,19 @@ export const GET: APIRoute = async () => {
     
     const currentDate = new Date();
 
-    const checkTendersToOpen = async () => {
-        //Ths method check for the each tender to see where the status are pending - once the start date is less than the current date. it changes the status to open
-        const tenders = await prisma.tender.findMany({
-            where: {
-                startDate: { lte: currentDate.toISOString() },
-                OR: [
-                    // { status: 'pending' },
-                    { status: 'sent' }
-                ]
-            },
-        });
-        return tenders
-    }
+    // const checkTendersToOpen = async () => {
+    //     //Ths method check for the each tender to see where the status are pending - once the start date is less than the current date. it changes the status to open
+    //     const tenders = await prisma.tender.findMany({
+    //         where: {
+    //             startDate: { lte: currentDate.toISOString() },
+    //             OR: [
+    //                 // { status: 'pending' },
+    //                 { status: 'sent' }
+    //             ]
+    //         },
+    //     });
+    //     return tenders
+    // }
     
     const checkTendersToClose = async () => {
         /* 
@@ -38,32 +38,32 @@ export const GET: APIRoute = async () => {
         return tenders
     }
 
-    const tenderToOpen = await checkTendersToOpen();
+    // const tenderToOpen = await checkTendersToOpen();
     const tenderToClose = await checkTendersToClose();
 
 
     try {
-        if (tenderToOpen.length > 0) {
-            await Promise.all(
-                tenderToOpen.map(async (tender) => {
-                    await prisma.tender.update({
-                        where: { id: tender.id },
-                        data: { status: "open" },
-                    });
+        // if (tenderToOpen.length > 0) {
+        //     await Promise.all(
+        //         tenderToOpen.map(async (tender) => {
+        //             await prisma.tender.update({
+        //                 where: { id: tender.id },
+        //                 data: { status: "open" },
+        //             });
 
-                    // Corrected updateMany for bids
-                    await prisma.bid.updateMany({
-                        where: {
-                            tenderId: tender.id,
-                            status: {
-                                not: "closed"
-                            }
-                        },
-                        data: { status: "open" },
-                    });
-                })
-            );
-        };
+        //             // Corrected updateMany for bids
+        //             await prisma.bid.updateMany({
+        //                 where: {
+        //                     tenderId: tender.id,
+        //                     status: {
+        //                         not: "closed"
+        //                     }
+        //                 },
+        //                 data: { status: "open" },
+        //             });
+        //         })
+        //     );
+        // };
 
         if (tenderToClose.length > 0) {
             await Promise.all(

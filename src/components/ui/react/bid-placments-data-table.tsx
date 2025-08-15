@@ -109,7 +109,7 @@ export function BidPlacementDataTable({ data, role }: { data: any, role: string 
             accessorFn: (row) => row.status,
             accessorKey: "status",
             header: "Bid Order",
-            cell: ({ getValue }) => (String(getValue()) === 'placed' ? <p className="text-primary uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'rejected' ? <p className="text-red-600 uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'accepted' ? <p className="text-green-600 uppercase font-semibold">{String(getValue())}</p> : <p className="text-amber-600 uppercase font-semibold">{`Error`}</p>)
+            cell: ({ getValue }) => (String(getValue()) === 'placed' ? <p className="text-primary uppercase font-semibold">{String(getValue())}</p> : String(getValue()) === 'rejected' ? <p className="text-red-600 uppercase font-semibold">{`Unsuccessful`}</p> : String(getValue()) === 'accepted' ? <p className="text-green-600 uppercase font-semibold">{`Successful`}</p> : <p className="text-amber-600 uppercase font-semibold">{`Error`}</p>)
         },
         {
             id: "actions",

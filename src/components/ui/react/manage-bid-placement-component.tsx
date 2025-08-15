@@ -213,7 +213,7 @@ export function ManageBidPlacementComponent({ result, documentPassword, token, b
                                 </div>
 
                                 <div className='flex justify-center mt-8'>
-                                    {(!result?.status || result?.status !== 'placed') ? <h3 className={`font-semibold text-xl border-2 p-4 rounded-lg ${result?.status === 'accepted' ? 'text-green-600 border-green-600 bg-green-50' : result?.status === 'rejected' ? 'text-red-600 border-red-600 bg-red-50' :  'hidden'} `}>{result?.status.toUpperCase()}</h3> : ''}
+                                    {(!result?.status || result?.status !== 'placed') ? <h3 className={`font-semibold text-xl border-2 p-4 rounded-lg ${result?.status === 'accepted' ? 'text-green-600 border-green-600 bg-green-50' : result?.status === 'rejected' ? 'text-red-600 border-red-600 bg-red-50' :  'hidden'} `}>{result?.status === "accepted" ? "Successful" : "Unsuccessful"}</h3> : ''}
                                 </div>
                             </div>
                             

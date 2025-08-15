@@ -34,7 +34,7 @@ const bucketPublicDomain = import.meta.env.BUCKET_PUBLIC_DOMAIN;
 <OperatorLayout title={`Tender | ${result?.tender?.title}`}>
   <ManageTenderComponent
     token={HEADER_TOKEN}
-    client:load
+    client:only="react"
     result={result}
     role={role}
     bucketPublicDomain={bucketPublicDomain}

@@ -4,6 +4,10 @@ export const ADMIN_OTP_EMAIL = [
     process.env.ADMIN_EMAIL,
 ];
 
+
+
+//ADMIN EMAIL
+
 export const APPROVE_SIGN_IN_HTML = (otp: number | number, signInUser?: string) => {
     return `
             <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
@@ -13,62 +17,6 @@ export const APPROVE_SIGN_IN_HTML = (otp: number | number, signInUser?: string) 
                     <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${otp}</h3>
                 </div>
                 <p style="color: #555; font-size: 14px;">Keep this code safe. It's valid for 15 minutes.</p>
-            </div>
-            `;
-};
-
-export const APPROVE_SIGN_UP_HTML = (otp: string | number) => {
-    return `
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-                <h1 style="color: #333; font-size: 24px;">Confirm your OTP</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">Verify your account with the one-time password (OTP) below:</p>
-                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
-                    <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${otp}</h3>
-                </div>
-                <p style="color: #555; font-size: 14px;">Keep this code safe. It's valid for 15 minutes.</p>
-            </div>
-            `;
-}
-
-
-export const MEMBER_CREATE_HTML = (password: string) => {
-    return `
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account has been created successfully. Your password is:</p>
-                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
-                    <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${password}</h3>
-                </div>
-                <p style="color: #555; font-size: 14px;">Ensure to change your password after login.</p>
-            </div>
-            `;
-}
-
-export const RESEND_OTP_HTML = APPROVE_SIGN_UP_HTML;
-
-export const ADD_VENDOR_HTML = (companyName: string, token: string) => {
-    return `
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX, ${companyName}!</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account has been successfully created.</p>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">Please use the link below to set your password and start exploring our services:</p>
-                <a href="${process.env.APP_URL}/auth/set-password?token=${token}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">Set Your Password</a>
-                <p style="color: #555; font-size: 14px;">This link will expire in 24 hours.</p>
-            </div>
-            `;
-};
-
-export const ADD_VENDOR_HTML_MANUAL_VERIFY = (companyName: string, password: string) => {
-    return `
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX, ${companyName}!</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account password has been generated:</p>
-                <div style="background-color: #f8f8f8; border-radius: 8px; padding: 15px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <h4 style="color: #007bff; font-size: 18px; margin: 0; font-weight: 600;">Your Password</h4>
-                    <p style="color: #333; font-size: 20px; margin: 10px 0 0; font-family: monospace; letter-spacing: 1px;">${password}</p>
-                </div>
-                
-                <p style="color: #555; font-size: 14px;">Please ensure to change your password upon first login for security purposes.</p>
             </div>
             `;
 };
@@ -89,16 +37,7 @@ export const ADD_ADMIN_EMAIL_NOTIFICATION = (role: string, fullname: string, pas
             `;
 };
 
-export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
-    return `
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-            <h1 style="color: #333; font-size: 24px;">Hi ${companyName}!</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new tender with ID PTID${tenderId}. Ensure to review and send in an appropriate bid before the close date.</p>
-                 <p style="color: #555; font-size: 16px; margin: 20px 0;">Follow the link to see your tender</p>
-                <a href="${process.env.APP_URL}/u/user/tenders/manage/${tenderId}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">View tender</a>
-            </div>
-            `;
-};
+
 
 export const NEW_BID_NOTIFICATION_HTML = (companyName: string, tenderId: number, tenderName: string, dateAndTime: string) => {
     return `
@@ -109,18 +48,6 @@ export const NEW_BID_NOTIFICATION_HTML = (companyName: string, tenderId: number,
         `;
 };
 
-export const ONBOARDING_COMPLETE_HTML = (companyName: string, platform: string) => {
-    return `
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX</h1>
-                <p style="color: #555; font-size: 16px; margin: 20px 0;">Welcome ${companyName}, your account registration is complete</p>
-                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
-                    <p style="font-size: 16px; color: gray;">You have successfully registered on ${platform} app. ,<br/>Ensure you follow all our guidlines to avoid desciplinary actions against you.<br/><br/>Feel free to reach out to us for any inquiry.</p>
-                </div>
-                <p style="color: #555; font-size: 14px;">&copy; ${new Date().getFullYear()}. POL eRFX</p>
-            </div>
-            `
-}
 
 export const GENERATE_PASSWORD_RESET_OTP_HTML = (otp: string | number) => {
     return `
@@ -161,6 +88,124 @@ export const BIDS_ACCESS_VERIFICATION_OTP_EMAIL = (otp: number, bidId: number) =
             `;
 };
 
+
+
+
+//VENDORS EMAIL
+export const APPROVE_SIGN_UP_HTML = (otp: string | number) => {
+    return `
+        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+            <h1 style="color: #333; font-size: 24px;">Confirm your OTP</h1>
+            <p style="color: #555; font-size: 16px; margin: 20px 0;">Verify your account with the one-time password (OTP) below:</p>
+            <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${otp}</h3>
+            </div>
+            <p style="color: #555; font-size: 14px;">Keep this code safe. It's valid for 15 minutes.</p>
+            <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
+        </div>
+    `;
+};
+
+
+export const MEMBER_CREATE_HTML = (password: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account has been created successfully. Your password is:</p>
+                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                    <h3 style="font-size: 20px; font-weight: bold; color: #007bff;">${password}</h3>
+                </div>
+                <p style="color: #555; font-size: 14px;">Ensure to change your password after login.</p>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
+            </div>
+            `;
+}
+
+export const ADD_VENDOR_HTML = (companyName: string, token: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX, ${companyName}!</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account has been successfully created.</p>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Please use the link below to set your password and start exploring our services:</p>
+                <a href="${process.env.APP_URL}/auth/set-password?token=${token}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">Set Your Password</a>
+                <p style="color: #555; font-size: 14px;">This link will expire in 24 hours.</p>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
+            </div>
+            `;
+};
+
+
+export const ADD_VENDOR_HTML_MANUAL_VERIFY = (companyName: string, password: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX, ${companyName}!</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Your account password has been generated:</p>
+                <div style="background-color: #f8f8f8; border-radius: 8px; padding: 15px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h4 style="color: #007bff; font-size: 18px; margin: 0; font-weight: 600;">Your Password</h4>
+                    <p style="color: #333; font-size: 20px; margin: 10px 0 0; font-family: monospace; letter-spacing: 1px;">${password}</p>
+                </div>
+                
+                <p style="color: #555; font-size: 14px;">Please ensure to change your password upon first login for security purposes.</p>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
+            </div>
+            `;
+};
+
+export const ADD_TENDER_HTML = (companyName: string, tenderId: number) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Hi ${companyName}!</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">There's a new tender with ID PTID${tenderId}. Ensure to review and send in an appropriate bid before the close date.</p>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Follow the link to see your tender</p>
+                <a href="${process.env.APP_URL}/u/user/tenders/manage/${tenderId}" style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 10px 20px; margin: 20px 0; border-radius: 5px; text-decoration: none;">View tender</a>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
+            </div>
+            `;
+};
+
+export const ONBOARDING_COMPLETE_HTML = (companyName: string, platform: string) => {
+    return `
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="color: #333; font-size: 24px;">Welcome to POL eRFX</h1>
+                <p style="color: #555; font-size: 16px; margin: 20px 0;">Welcome ${companyName}, your account registration is complete</p>
+                <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                    <p style="font-size: 16px; color: gray;">You have successfully registered on ${platform} app. ,<br/>Ensure you follow all our guidlines to avoid desciplinary actions against you.<br/><br/>Feel free to reach out to us for any inquiry.</p>
+                </div>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
+            </div>
+            `
+};
+
 export const BID_ACCEPTANCE_HTML = (companyName: string, title: string) => {
     return `
             <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
@@ -177,7 +222,12 @@ export const BID_ACCEPTANCE_HTML = (companyName: string, title: string) => {
                     <br/><br/>Yours faithfully <br/><br/> 
                     For and on behalf of Pillar Oil Limited.</p>
                 </div>
-                <p style="color: #555; font-size: 14px; text-align: center">&copy; ${new Date().getFullYear()}. POL eRFX</p>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
             </div>
             `
 };
@@ -196,7 +246,21 @@ export const BID_REJECTION_HTML = (companyName: string, title: string) => {
                     <br/><br/>Yours faithfully <br/><br/> 
                     For and on behalf of Pillar Oil Limited.</p>
                 </div>
-                <p style="color: #555; font-size: 14px; text-align: center">&copy; ${new Date().getFullYear()}. POL eRFX</p>
+                <div style="margin-top: 40px; color: #999; font-size: 11px; text-align: center;">
+                &copy; Pillar Oil Limited.<br>
+                <span style="display: block; margin-top: 8px;">
+                    Disclaimer: This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager.
+                </span>
+            </div>
             </div>
             `
-}
+};
+
+
+/////////
+
+
+export const RESEND_OTP_HTML = APPROVE_SIGN_UP_HTML;
+
+
+

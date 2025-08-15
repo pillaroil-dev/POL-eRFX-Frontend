@@ -47,16 +47,19 @@ export const POST: APIRoute = async ({ request }) => {
 
         if (response?.count > 0) {
             // Update the tender status to "sent"
+            /**
+             * Change the default status to open instead of sent because tenders are rather open when sent.
+             */
             const tenderUpdated = await prisma.tender.update({
                 where: { id: tenderId },
-                data: { status: "sent", startDate: new Date() },
+                data: { status: "open", startDate: new Date() },
                 include: {
                     bids: true
                 }
             });
 
 
-            if (tenderUpdated?.status === "sent") {
+            if (tenderUpdated?.status === "open") {
 
                 const sentTender = await prisma.bid.findFirst({
                     where: {

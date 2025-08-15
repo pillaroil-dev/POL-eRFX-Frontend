@@ -205,7 +205,7 @@ export function ManageTenderComponent({ result, token, role, bucketPublicDomain 
                                                 readOnly />
                                             
                                             {/** Dialog for end date change **/}
-                                            {role === 'admin' && <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+                                            {(role === 'admin' || role === 'operator') && <Dialog open={open} onOpenChange={() => setOpen(!open)}>
                                                 <DialogTrigger>
                                                     <EditIcon className='cursor-pointer' onClick={() => setOpen(true)} />
                                                 </DialogTrigger>

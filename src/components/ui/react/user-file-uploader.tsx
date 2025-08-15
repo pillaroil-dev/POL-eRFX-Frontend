@@ -35,7 +35,13 @@ export const UserFileUploader = ({status}: {status: string}) => {
                             method: 'PUT',
                             body: files[index]?.file,
                             headers: {
-                                'Content-Type': files[index]?.meta?.type?.includes('pdf') ? 'application/pdf' : files[index]?.meta?.type?.includes('doc') || files[index]?.meta?.type?.includes('docx') ? 'application/msword' : 'image/*',
+                                'Content-Type': files[index]?.meta?.type?.includes('pdf')
+                                    ? 'application/pdf'
+                                    : files[index]?.meta?.type?.includes('doc') || files[index]?.meta?.type?.includes('docx')
+                                        ? 'application/msword'
+                                        : files[index]?.meta?.type?.includes('xls') || files[index]?.meta?.type?.includes('xlsx')
+                                            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                                            : 'image/*',
                             },
                         });
                     }));
@@ -118,7 +124,7 @@ export const UserFileUploader = ({status}: {status: string}) => {
                     }
                     return null;
                 }}
-                accept=".pdf, .png, .jpeg, .jpg .doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                accept=".pdf, .png, .jpeg, .jpg .doc, .docx, .xlx, .xlxs, .xml, application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 classNames={{
                     dropzone: 'w-full min-h-40 relative bg-white/60 dark:bg-background-color border rounded-md px-2 py-4 !text-foreground',
                     preview: 'flex justify-between !text-foreground h-8 w-full px-2 text-xs ',

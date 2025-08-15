@@ -72,7 +72,7 @@ export const POST: APIRoute = async ({request}) => {
             default:
                 break;
         }
-        return new Response(JSON.stringify({message: `Operation Successful. ${res.action === 'accept' ? 'Accepted.' : 'Rejected.'}`}), {status: 200})
+        return new Response(JSON.stringify({message: `Operation Successful. ${res.action === 'accept' ? 'Successful' : 'Unsuccessful'}`}), {status: 200})
     } catch (error) {
         console.log(error)
         return new Response(JSON.stringify({ message: 'Operation Failed' }), { status: 400 })
