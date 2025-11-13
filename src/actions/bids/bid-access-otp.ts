@@ -31,7 +31,7 @@ export const bidAccessAction = {
                 });
                 await transporter.sendMail({
                     from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
-                    to: process.env.OPERATOR_APPROVAL_ADMINS, 
+                    to: import.meta.env.EMAIL_FOR_BID_OPENING,
                     subject: "Bids Access Verification",
                     html: BIDS_ACCESS_VERIFICATION_OTP_EMAIL(parseInt(generatedOtp), bidId),
                 });

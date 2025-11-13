@@ -46,7 +46,7 @@ export const POST: APIRoute = async ({ request }) => {
         await transporter.sendMail({
             from: `"POL eRFX" <${process.env.MAIL_USERNAME}>`,
             subject: "New Bid Placement Alert",
-            to: import.meta.env.ADMIN_EMAIL,
+            to: import.meta.env.EMAIL_FOR_BID_SUBMISSON_NOTIFICATION,
             html: NEW_BID_NOTIFICATION_HTML(bidData.contractor.companyName, bidData.tenderId, bidData.tender.title, dateAndTime)
         });
 

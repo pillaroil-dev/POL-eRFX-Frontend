@@ -1,10 +1,5 @@
 export const FROM_NAME = "POL eRFX.";
 
-export const ADMIN_OTP_EMAIL = [
-    process.env.ADMIN_EMAIL,
-];
-
-
 
 //ADMIN EMAIL
 
