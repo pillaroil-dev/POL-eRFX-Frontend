@@ -1,6 +1,5 @@
 ---
 import {
-  ADMIN_OTP_EMAIL,
   APPROVE_SIGN_IN_HTML,
   FROM_NAME,
 } from "@/constants/notifications/email";
@@ -21,7 +20,7 @@ if (!otpVerified && OTP_ROLES.includes(role)) {
   try {
     await transporter.sendMail({
       from: `${FROM_NAME} <${process.env.MAIL_USERNAME}>`,
-      to: ADMIN_OTP_EMAIL,
+      to: import.meta.env.OPERATOR_APPROVAL_ADMINS,
       subject: "Approve Sign-in",
       text: `Your Sign-in OTP is ${otp}`,
       html: APPROVE_SIGN_IN_HTML(otp, signInUser),

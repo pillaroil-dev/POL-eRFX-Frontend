@@ -30,13 +30,6 @@ export const POST: APIRoute = async ({request}) => {
     const {role, payload} = data;
     const {id, newAdminEmail, fullname, appName, appUrl, smtpUser, smtpHost, smtpPassword, smtpPort} = payload;
 
-    // console.log({
-    //     id,
-    //     role,
-    //     newAdminEmail,
-    //     fullname
-    // })
-
     const generatedPassword = generateRandomPassword(8);
     const password = bcrypt.hashSync(generatedPassword, salt);
 
