@@ -19,6 +19,9 @@ export default defineConfig({
   experimental: {
     session: true
   },
+  devToolbar: { 
+    enabled: false 
+  },
   session: {
     driver: "redis", //Required: the name of the unstorage driver
     options: {
