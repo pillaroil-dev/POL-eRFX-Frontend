@@ -46,7 +46,6 @@ export const POST: APIRoute = async ({ request }) => {
         const tenderId = Array.isArray(result.tender) ? result.tender[0].id : result.tender.id;
 
         if (response?.count > 0) {
-            // Update the tender status to "sent"
             /**
              * Change the default status to open instead of sent because tenders are rather open when sent.
              */
