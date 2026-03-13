@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
                 location: location as string,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
-                status: 'open', //Pending: change to open to open tenders immediately
+                status: 'pending',
                 submissionDate: new Date(),
                 items: {
                     create: items?.map((item) => ({
