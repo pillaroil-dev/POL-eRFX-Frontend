@@ -7,9 +7,7 @@ import type { APIRoute } from "astro";
  * API endpoint to send a tender to contractors
  */
 export const POST: APIRoute = async ({ request }) => {
-
     const result = await request.json();
-
     try {
         // First, get all contractors and their members
         const contractorsWithMembers = await Promise.all(
@@ -30,12 +28,12 @@ export const POST: APIRoute = async ({ request }) => {
         // Create bids for contractors
         const response = await prisma.bid.createMany({
             data: Array.isArray(result.recipientsWithDetails) ? result.recipientsWithDetails.map(recipient => ({
-                status: result.tender.status,
+                status:  "open", //result.tender.status,  //contraint: tender status changes to open when sent, so this should be open instead of sent/pending
                 contractorId: recipient.id,
                 tenderId: result.tender.id,
                 submissionDate: new Date()
             })) : [{
-                status: result.tender.status,
+                status:  "open", //result.tender.status,  //contraint: tender status changes to open when sent, so this should be open instead of sent/pending
                 contractorId: result.recipientsWithDetails.flatMap(recipient => recipient.id)[0],
                 tenderId: result.tender.id,
                 submissionDate: new Date()
